@@ -26,13 +26,13 @@
     <table id="calendarTable">
         <thead>
             <tr>
-                <th>Lun</th>
-                <th>Mar</th>
-                <th>Mié</th>
-                <th>Jue</th>
-                <th>Vie</th>
-                <th>Sáb</th>
-                <th>Dom</th>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+                <th>Sábado</th>
+                <th>Domingo</th>
             </tr>
         </thead>
         <tbody id="calendarBody">
@@ -45,7 +45,7 @@
             const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
                 "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             const daysInMonth = new Date(year, month + 1, 0).getDate(); // Número de días en el mes
-            const firstDayOfWeek = new Date(year, month, 1).getDay(); // Día de la semana del primer día del mes
+            const firstDayOfWeek = new Date(year, month, 0).getDay(); // Día de la semana del primer día del mes
             const calendarBody = document.getElementById("calendarBody");
             const monthYear = document.getElementById("monthYear");
             const monthInput = document.getElementById("monthInput");
