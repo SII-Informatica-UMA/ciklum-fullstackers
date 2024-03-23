@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendario Automatizado</title>
+    <title>Calendario</title>
     <style>
         table {
             width: 100%;
@@ -56,7 +56,7 @@
 
             let date = 1;
             // Generar filas para el calendario
-            for (let i = 0; i < 6; i++) {
+            for (let i = 0; date <= daysInMonth; i++) {
                 const row = document.createElement("tr");
 
                 // Generar celdas para cada día de la semana
