@@ -18,6 +18,11 @@
 </head>
 <body>
     <h2 id="monthYear"></h2>
+    <div>
+        <label for="monthInput">Mes (1-12):</label>
+        <input type="number" id="monthInput" min="1" max="12" value="1">
+        <button onclick="changeMonth()">Cambiar Mes</button>
+    </div>
     <table id="calendarTable">
         <thead>
             <tr>
@@ -43,6 +48,7 @@
             const firstDayOfWeek = new Date(year, month, 1).getDay(); // Día de la semana del primer día del mes
             const calendarBody = document.getElementById("calendarBody");
             const monthYear = document.getElementById("monthYear");
+            const monthInput = document.getElementById("monthInput");
 
             // Limpiar el cuerpo del calendario
             calendarBody.innerHTML = "";
@@ -72,7 +78,14 @@
             }
         }
 
-        // Llamar a la función para generar el calendario actual
+        // Función para cambiar el mes
+        function changeMonth() {
+            const year = new Date().getFullYear(); // Año actual
+            const month = document.getElementById("monthInput").value - 1; // Mes seleccionado (-1 porque en JavaScript los meses van de 0 a 11)
+            generateCalendar(year, month);
+        }
+
+        // Generar el calendario con el mes actual al cargar la página
         const currentDate = new Date();
         generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
     </script>
