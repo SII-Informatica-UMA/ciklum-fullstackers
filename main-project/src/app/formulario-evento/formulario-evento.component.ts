@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { evento } from '../evento';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-formulario-evento',
