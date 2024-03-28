@@ -4,7 +4,7 @@
     hora: string;
     lugar: string;
   }
-  */
+
 export interface evento {
     nombre: string;
     descripcion: string;
@@ -15,4 +15,12 @@ export interface evento {
     reglaRecurrencia: string;
     idCliente: number;
     id: number;
+}
+*/
+export interface evento {
+  id: number;
+  nombre: string;
+  apellidos: string;
+  email: string;
+  telefono: string;
 }
