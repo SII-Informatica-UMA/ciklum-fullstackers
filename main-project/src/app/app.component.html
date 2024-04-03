@@ -15,7 +15,7 @@
         <button onclick="changeMonth()">Cambiar Mes</button>
         <br>
         <label>Añadir evento:</label>
-        <button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="aniadirEvento()">pala</button>
+        <button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="aniadirEvento()">  </button>
         <br>
     </div>
     <div class="container">
@@ -105,63 +105,7 @@
         </table>
     </div>
 
-    <script>
-        // Función para generar el calendario
-        function generateCalendar(year, month) {
-            const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-            const daysInMonth = new Date(year, month + 1, 0).getDate(); // Número de días en el mes
-            const firstDayOfWeek = new Date(year, month, 0).getDay(); // Día de la semana del primer día del mes
-            const calendarBody = document.getElementById("calendarBody");
-            const monthYear = document.getElementById("monthYear");
-            const monthInput = document.getElementById("monthInput");
-
-            // Limpiar el cuerpo del calendario
-            calendarBody.innerHTML = "";
-            monthYear.textContent = monthNames[month] + " " + year;
-
-            let date = 1;
-            // Generar filas para el calendario
-            for (let i = 0; date <= daysInMonth; i++) {
-                const row = document.createElement("tr");
-
-                // Generar celdas para cada día de la semana
-                for (let j = 0; j < 8; j++) {
-                    const cell = document.createElement("td");
-                    if (j === 0) {
-                        // Celda de horario
-                        if (date <= daysInMonth) {
-                            cell.textContent = date + "h";
-                        } else {
-                            cell.textContent = "";
-                        }
-                    } else if (i === 0 && j < firstDayOfWeek) {
-                        // Espacios en blanco para los días anteriores al primer día del mes
-                        cell.textContent = "";
-                    } else if (date > daysInMonth) {
-                        // No mostrar días que superan el número de días en el mes
-                        cell.textContent = "";
-                    } else {
-                        cell.textContent = "Editar";
-                    }
-                    row.appendChild(cell);
-                    if (j === 0) date++;
-                }
-                calendarBody.appendChild(row);
-            }
-        }
-
-        // Función para cambiar el mes
-        function changeMonth() {
-            const year = new Date().getFullYear(); // Año actual
-            const month = document.getElementById("monthInput").value - 1; // Mes seleccionado (-1 porque en JavaScript los meses van de 0 a 11)
-            generateCalendar(year, month);
-        }
-
-        // Generar el calendario con el mes actual al cargar la página
-        const currentDate = new Date();
-        generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
-    </script>
+   
 </body>
 </html>
 

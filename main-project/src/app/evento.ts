@@ -17,6 +17,7 @@ export interface evento {
     id: number;
 }
 */
+
 export interface evento {
   id: number;
   nombre: string;
