@@ -4,6 +4,7 @@ import { ForgottenPasswordComponent } from './forgotten-password/forgotten-passw
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ListadoUsuarioComponent } from './listado-usuario/listado-usuario.component';
 import { PrincipalComponent } from './principal/principal.component';
+import { CalendarioComponent } from './calendario/calendario.component';
 
 export const routes: Routes = [
   {
@@ -25,5 +26,9 @@ export const routes: Routes = [
   {
     path: '',
     component: PrincipalComponent
+  },
+  {
+    path: 'calendario',
+    component: CalendarioComponent
   }
 ];
