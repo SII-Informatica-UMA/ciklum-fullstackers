@@ -10,161 +10,32 @@
         <h2>Organización de Entrenadores</h2>
     </div>
     <div class="container">
-        <label for="monthInput">Mes:</label>
+        <!--<label for="monthInput">Mes:</label>
         <input type="number" id="monthInput" min="1" max="12" value="1">
         <button onclick="changeMonth()">Cambiar Mes</button>
         <br>
-        <label>Añadir evento:</label>
+        <label>Añadir evento:</label>-->
         
-        <!--<button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="aniadirEvento()">pala </button>-->
+        <button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="guardarEvento()">Añadir evento</button>
         <br>
     </div>
     
-    <div class="container">
-        <table id="calendarTable">
-            <thead>
-                <tr>
-                    <th class="horario-column">Horario</th>
-                    <th>Lunes</th>
-                    <th>Martes</th>
-                    <th>Miércoles</th>
-                    <th>Jueves</th>
-                    <th>Viernes</th>
-                    <th>Sábado</th>
-                    <th>Domingo</th>
-                </tr>
-            </thead>
-            <tbody id="calendarBody">
-                    <tr class="morning-row">
-                        <td>Mañana</td>
-                        <td colspan="7">Franja Central</td>
-                    </tr>
-                    <tr class="morning-row">
-                        <td>8:00 - 10:00</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr class="morning-row">
-                        <td>10:00 - 12:00</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr class="morning-row">
-                        <td>12:00 - 14:00</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr class="afternoon-row">
-                        <td>Tarde</td>
-                        <td colspan="7">Franja Central</td>
-                    </tr>
-                    <tr class="afternoon-row">
-                        <td>14:00 - 16:00</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr class="afternoon-row">
-                        <td>16:00 - 18:00</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr class="afternoon-row">
-                        <td>18:00 - 20:00</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-            </tbody>
-        </table>
+    <div>
+        <div class="container">
+            <div class="card" *ngFor="let evento of calendario">
+                <div class="start-date">{{ evento.inicio }}</div>
+                <div class="info">
+                    <h2>{{ evento.nombre }}</h2>
+                    <p><strong>Descripción:</strong> {{ evento.descripcion }}</p>
+                    <p><strong>Observaciones:</strong> {{ evento.observaciones }}</p>
+                    <p><strong>Lugar:</strong> {{ evento.lugar }}</p>
+                    <p><strong>Duración (minutos):</strong> {{ evento.duracionMinutos }}</p>
+                    <p><strong>Regla de Recurrencia:</strong> {{ evento.reglaRecurrencia }}</p>
+                    <p><strong>ID Cliente:</strong> {{ evento.idCliente }}</p>
+                    <p><strong>ID:</strong> {{ evento.id }}</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <!--
-    <script>
-        // Función para generar el calendario
-        function generateCalendar(year, month) {
-            const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-            const daysInMonth = new Date(year, month + 1, 0).getDate(); // Número de días en el mes
-            const firstDayOfWeek = new Date(year, month, 0).getDay(); // Día de la semana del primer día del mes
-            const calendarBody = document.getElementById("calendarBody");
-            const monthYear = document.getElementById("monthYear");
-            const monthInput = document.getElementById("monthInput");
 
-            // Limpiar el cuerpo del calendario
-            calendarBody.innerHTML = "";
-            monthYear.textContent = monthNames[month] + " " + year;
-
-            let date = 1;
-            // Generar filas para el calendario
-            for (let i = 0; date <= daysInMonth; i++) {
-                const row = document.createElement("tr");
-
-                // Generar celdas para cada día de la semana
-                for (let j = 0; j < 8; j++) {
-                    const cell = document.createElement("td");
-                    if (j === 0) {
-                        // Celda de horario
-                        if (date <= daysInMonth) {
-                            cell.textContent = date + "h";
-                        } else {
-                            cell.textContent = "";
-                        }
-                    } else if (i === 0 && j < firstDayOfWeek) {
-                        // Espacios en blanco para los días anteriores al primer día del mes
-                        cell.textContent = "";
-                    } else if (date > daysInMonth) {
-                        // No mostrar días que superan el número de días en el mes
-                        cell.textContent = "";
-                    } else {
-                        cell.textContent = "Editar";
-                    }
-                    row.appendChild(cell);
-                    if (j === 0) date++;
-                }
-                calendarBody.appendChild(row);
-            }
-        }
-
-        // Función para cambiar el mes
-        function changeMonth() {
-            const year = new Date().getFullYear(); // Año actual
-            const month = document.getElementById("monthInput").value - 1; // Mes seleccionado (-1 porque en JavaScript los meses van de 0 a 11)
-            generateCalendar(year, month);
-        }
-
-        // Generar el calendario con el mes actual al cargar la página
-        const currentDate = new Date();
-        generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
-    </script>
-    -->
-</body>
-</html>
 
