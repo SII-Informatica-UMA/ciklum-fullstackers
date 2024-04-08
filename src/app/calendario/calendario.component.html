@@ -13,6 +13,13 @@
         <label for="monthInput">Mes:</label>
         <input type="number" id="monthInput" min="1" max="12" value="1">
         <button onclick="changeMonth()">Cambiar Mes</button>
+        <script>
+            function changeMonth() {
+                const year = new Date().getFullYear(); // Get the current year
+                const month = document.getElementById("monthInput").value - 1; // Get the selected month (-1 because months in JavaScript are zero-based)
+                generateCalendar(year, month); // Call the generateCalendar function with the new year and month
+            }
+        </script>
         <br>
         <label>Añadir evento:</label>
         
