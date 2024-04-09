@@ -15,22 +15,22 @@
         <input class="form-control" id="lugar" [(ngModel)]="evento.lugar" placeholder="lugar">
         <label for="duracionMinutos">Duración (minutos):</label>
         <input class="form-control" id="duracionMinutos" [(ngModel)]="evento.duracionMinutos" placeholder="duracion">
-        <label for="inicio">Inicio:</label>
-        <input class="form-control" id="inicio" [(ngModel)]="evento.inicio" placeholder="inicio">
+
+        <label for="hora">Inicio:</label>
+        <select id="hora" class="form-control" [(ngModel)]="evento.inicio" name="inicio">
+          <option value="">Selecciona una hora...</option>
+          <option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</option>
+        </select>
+
         <label for="reglaRecurrencia">Recurrencia:</label>
         <input class="form-control" id="reglaRecurrencia" [(ngModel)]="evento.reglaRecurrencia" placeholder="Recurrencia">
         <label for="idCliente">Cliente:</label>
         <input class="form-control" id="idCliente" [(ngModel)]="evento.idCliente" placeholder="idCliente">
         <label for="id">Id:</label>
         <input class="form-control" id="id" [(ngModel)]="evento.id" placeholder="id">
-        <!--<div *ngIf="esEntrenador()">
-          <button (click)="agregarDisponibilidad()">Disponibilidad</button>
-        </div>
-      -->    
   
     </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="guardarEvento()">Guardar</button>
-    <button type="button" class="btn btn-outline-dark" (click)="cancelar()">Cancelar</button>
   </div>
