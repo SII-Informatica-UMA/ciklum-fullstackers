@@ -8,4 +8,5 @@ inicio:string
 reglaRecurrencia:string
 idCliente:number
 id:number
+fecha:string
 }

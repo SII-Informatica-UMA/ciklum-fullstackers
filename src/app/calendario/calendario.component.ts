@@ -11,6 +11,7 @@ import { BackendFakeService } from '../services/backend.fake.service';
 import { NgbCalendar, NgbDate, NgbDatepickerModule, NgbDateStruct, NgbDatepickerNavigateEvent } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, NgModel } from '@angular/forms';
 import { EventosService } from '../services/eventos.service';
+ 
 @Component({
   selector: 'app-calendario',
   standalone: true,
@@ -32,7 +33,7 @@ export class CalendarioComponent {
 
 
   calendario : Evento[] = [
-    {nombre: 'Evento 1', descripcion: 'Descripción del evento 1', observaciones: 'Observaciones del evento 1', lugar: 'Lugar del evento 1', duracionMinutos: 60, inicio: '2021-01-01T00:00:00', reglaRecurrencia: 'Regla de recurrencia del evento 1', idCliente: 3, id: 1},
+    {nombre: 'Evento 1', descripcion: 'Descripción del evento 1', observaciones: 'Observaciones del evento 1', lugar: 'Lugar del evento 1', duracionMinutos: 60, inicio: '2021-01-01T00:00:00', reglaRecurrencia: 'Regla de recurrencia del evento 1', idCliente: 3, id: 1,fecha: ''},
   ]
   usuarios: Usuario [] = [];
   horasDisponibles: string[] = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
@@ -41,7 +42,8 @@ export class CalendarioComponent {
     private modalService: NgbModal,
     private backendService: BackendFakeService,
     private calendar:NgbCalendar,
-    private eventoService: EventosService) {this.actualizarUsuarios(); this.model = this.calendar.getToday();
+    private eventoService: EventosService) {this.actualizarUsuarios(); 
+      this.model = this.calendar.getToday();
       let _eventos = localStorage.getItem('eventos');
     if (_eventos) {
       this.calendario = JSON.parse(_eventos);
@@ -62,18 +64,34 @@ export class CalendarioComponent {
   guardarEvento(): void {
     let ref = this.modalService.open(FormularioEventoComponent);
     ref.componentInstance.accion = "Añadir";
-    ref.componentInstance.evento = {nombre: '', descripcion: '', observaciones: '', lugar: '', duracionMinutos: 0, inicio: '', reglaRecurrencia: '', idCliente: 0, id: 0};
+    
+    // Crea un nuevo evento y asigna la fecha
+    let nuevoEvento: Evento = {
+      nombre: '',
+      descripcion: '',
+      observaciones: '',
+      lugar: '',
+      duracionMinutos: 0,
+      inicio: '',
+      reglaRecurrencia: '',
+      idCliente: 0,
+      id: 0,
+      fecha: `${this.model.year}-${this.model.month}-${this.model.day}` 
+    };
+
+    ref.componentInstance.evento = nuevoEvento;
     ref.componentInstance.horasDisponibles = this.horasDisponibles;
 
-    ref.result.then((resultado: {evento: Evento, horaSeleccionada: string}) => {
+    ref.result.then((resultado: { evento: Evento, horaSeleccionada: string }) => {
       this.backendService.agregarEvento(resultado.evento)
-      .subscribe(eventoGuardado => {
-        this.calendario.push(eventoGuardado);
-        this.calendario.sort((a, b) => a.inicio.localeCompare(b.inicio));
-        this.horasDisponibles = this.horasDisponibles.filter(hora => hora !== resultado.horaSeleccionada);
-      });
+        .subscribe(eventoGuardado => {
+          this.calendario.push(eventoGuardado);
+          this.calendario.sort((a, b) => a.inicio.localeCompare(b.inicio));
+          this.horasDisponibles = this.horasDisponibles.filter(hora => hora !== resultado.horaSeleccionada);
+        });
     });
   }
+
 
   isEntrenador(): boolean{
     return this.rol?.rol == Rol.ENTRENADOR || this.rol?.rol == Rol.ADMINISTRADOR;
