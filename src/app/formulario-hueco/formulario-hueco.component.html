@@ -1,0 +1,22 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{accion}} hueco</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cierre usuario')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+        <label for="duracionMinutos">Duración (minutos):</label>
+        <input class="form-control" id="duracionMinutos" [(ngModel)]="hueco.duracionMinutos" placeholder="duracion">
+
+        <label for="hora">Inicio:</label>
+        <select id="hora" class="form-control" [(ngModel)]="hueco.inicio" name="inicio">
+          <option value="">Selecciona una hora...</option>
+          <option *ngFor="let hora of horas" [value]="hora">{{ hora }}</option>
+        </select>
+
+        <label for="reglaRecurrencia">Recurrencia:</label>
+        <input class="form-control" id="reglaRecurrencia" [(ngModel)]="hueco.reglaRecurrencia" placeholder="Recurrencia">
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="guardarHueco()">Guardar</button>
+  </div>
