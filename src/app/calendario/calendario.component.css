@@ -13,7 +13,8 @@ body {
     margin-bottom: 20px;
 }
 .calendario {
-    
+    margin-top: 10px;
+    text-align: center;
     align-items: center; /* Centra verticalmente */
 }
 .container {

@@ -1,16 +1,16 @@
-import { Component,inject } from '@angular/core';
+import { Component,inject, Injectable} from '@angular/core';
 import { Evento } from './evento.model';
 import { NgFor, NgIf, JsonPipe } from '@angular/common';
 import { Usuario, UsuarioImpl } from '../entities/usuario';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormularioEventoComponent } from '../formulario-evento/formulario-evento.component';
 import { UsuariosService } from '../services/usuarios.service';
-import { FormularioUsuarioComponent } from '../formulario-usuario/formulario-usuario.component';
+import { Observable, of } from 'rxjs';
 import { Rol } from '../entities/login';
 import { BackendFakeService } from '../services/backend.fake.service';
 import { NgbCalendar, NgbDate, NgbDatepickerModule, NgbDateStruct, NgbDatepickerNavigateEvent } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, NgModel } from '@angular/forms';
-
+import { EventosService } from '../services/eventos.service';
 @Component({
   selector: 'app-calendario',
   standalone: true,
@@ -36,7 +36,19 @@ export class CalendarioComponent {
   ]
   usuarios: Usuario [] = [];
   horasDisponibles: string[] = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
-  constructor(private usuariosService: UsuariosService, private modalService: NgbModal, private backendService: BackendFakeService, private calendar:NgbCalendar) {this.actualizarUsuarios(); this.model = this.calendar.getToday()}
+  constructor(
+    private usuariosService: UsuariosService,
+    private modalService: NgbModal,
+    private backendService: BackendFakeService,
+    private calendar:NgbCalendar,
+    private eventoService: EventosService) {this.actualizarUsuarios(); this.model = this.calendar.getToday();
+      let _eventos = localStorage.getItem('eventos');
+    if (_eventos) {
+      this.calendario = JSON.parse(_eventos);
+    } else {
+      this.calendario = [];
+    }
+    }
 
   obtenerEvento(): void {
     const id = parseInt(prompt('Introduce el ID del evento:') || '');
@@ -96,6 +108,19 @@ export class CalendarioComponent {
         }
       });
     }
+    }
+    
   }
-}
+  eliminarEvento(id: number): Observable<void> {
+    const index = this.calendario.findIndex(evento => evento.id === id);
+    if (index !== -1) {
+      this.calendario.splice(index, 1);
+      localStorage.setItem('eventos', JSON.stringify(this.calendario));
+      return of();
+    } else {
+      return new Observable<void>(observer => {
+        observer.error('Evento no encontrado');
+      });
+    }
+  }
 }
