@@ -80,7 +80,7 @@ export class CalendarioComponent {
   }
   eventosDelDia(event: Evento):boolean{
     let ano = event.inicio.substring(0,4)
-    return ano==this.model.year.toString();
+    return true;//ano==this.model.year.toString();
   }  
   eventoDelCliente(event: Evento): boolean{
     return event.idCliente==this.usuarioSesion?.id;
