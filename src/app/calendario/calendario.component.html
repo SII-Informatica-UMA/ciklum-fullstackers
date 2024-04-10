@@ -10,15 +10,28 @@
         <h2>Organización de Entrenadores</h2>
     </div>
     <div class="container">
+        <label for="monthInput">Mes:</label>
+        <!--<label for="monthInput">Mes:</label>
+        <input type="number" id="monthInput" min="1" max="12" value="1">
+        <button onclick="changeMonth()">Cambiar Mes</button>
+        <script>
+
+@@ -21,157 +21,28 @@
+            }
+        </script>
+        <br>
+        <label>Añadir evento:</label>
+        <label>Añadir evento:</label>-->
+        
+        <!--<button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="aniadirEvento()">pala </button>-->
         <button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="guardarEvento()">Añadir evento</button>
-        &nbsp;&nbsp;&nbsp;
-        <button type="button" class="btn btn-outline-primary bi bi-search" (click)="obtenerEvento()">Obtener evento</button>
         <br>
     </div>
     
-    <div>
-        <div class="container">
-            <div class="card" *ngFor="let evento of calendario">
+    
+    <div class="container"><div>
+        <div class="container" *ngIf="isEntrenador()">
+            <div class="card" *ngFor="let evento of calendario"> 
                 <div class="start-date">{{ evento.inicio }}</div>
                 <div class="info">
                     <h2>{{ evento.nombre }}</h2>
@@ -29,9 +42,26 @@
                     <p><strong>Regla de Recurrencia:</strong> {{ evento.reglaRecurrencia }}</p>
                     <p><strong>ID Cliente:</strong> {{ evento.idCliente }}</p>
                     <p><strong>ID:</strong> {{ evento.id }}</p>
+                    <button type="button" class="btn btn-outline-primary" (click)="editarEvento(evento.id, evento.idCliente)">Editar</button>
+                </div>
+            </div>
+        </div>
+        <div class="container" *ngIf="!isEntrenador()">
+            <div class="card" *ngFor="let evento of calendario"> 
+                <div *ngIf="eventoDelCliente(evento)">
+                <div class="start-date">{{ evento.inicio }}</div>
+                <div class="info">
+                    <h2>{{ evento.nombre }}</h2>
+                    <p><strong>Descripción:</strong> {{ evento.descripcion }}</p>
+                    <p><strong>Observaciones:</strong> {{ evento.observaciones }}</p>
+                    <p><strong>Lugar:</strong> {{ evento.lugar }}</p>
+                    <p><strong>Duración (minutos):</strong> {{ evento.duracionMinutos }}</p>
+                    <p><strong>Regla de Recurrencia:</strong> {{ evento.reglaRecurrencia }}</p>
+                    <p><strong>ID Cliente:</strong> {{ evento.idCliente }}</p>
+                    <p><strong>ID:</strong> {{ evento.id }}</p>
+                    
+                </div>
                 </div>
             </div>
         </div>
     </div>
-</body>
-</html>

@@ -1,3 +1,4 @@
+import { Evento } from "../calendario/evento.model";
 export interface Usuario {
   id: number;
   nombre: string;
@@ -6,6 +7,8 @@ export interface Usuario {
   email: string;
   password: string;
   administrador: boolean;
+  entrenador: boolean;
+  eventos: Evento[];
 }
 
 export class UsuarioImpl implements Usuario {
@@ -16,6 +19,8 @@ export class UsuarioImpl implements Usuario {
   email: string;
   password: string;
   administrador: boolean;
+  entrenador: boolean;
+  eventos: Evento[];
 
   constructor() {
     this.id = 0;
@@ -25,5 +30,7 @@ export class UsuarioImpl implements Usuario {
     this.email = '';
     this.password = '';
     this.administrador = false;
+    this.entrenador = false;
+    this.eventos = [];
   }
 }
