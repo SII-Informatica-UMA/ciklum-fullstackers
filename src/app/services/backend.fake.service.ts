@@ -5,6 +5,7 @@ import { SECRET_JWT } from "../config/config";
 import { from } from "rxjs";
 import * as jose from 'jose';
 import { FRONTEND_URI } from "../config/config";
+import { Evento } from "../calendario/evento.model";
 
 // Este servicio imita al backend pero utiliza localStorage para almacenar los datos
 
@@ -35,6 +36,7 @@ const usuariosC: Usuario [] = [
 export class BackendFakeService {
   private usuarios: Usuario [];
   private forgottenPasswordTokens;
+  private  eventos: Evento[] = [];
 
   constructor() {
     let _usuarios = localStorage.getItem('usuarios');
@@ -50,7 +52,15 @@ export class BackendFakeService {
     } else {
       this.forgottenPasswordTokens = new Map();
     }
-  }
+    
+    let _eventos = localStorage.getItem('eventos');
+    if (_eventos) {
+      this.eventos = JSON.parse(_eventos);
+    } else {
+      this.eventos = [];
+    }
+
+}
 
   getUsuarios(): Observable<Usuario[]> {
     return of(this.usuarios);
@@ -176,5 +186,45 @@ export class BackendFakeService {
   private generarCadena(): string {
     return Math.random().toString(36).substring(2);
   }
+  getEventos(): Observable<Evento[]> {
+    return of(this.eventos);
+  }
 
+  agregarEvento(evento: Evento): Observable<Evento> {
+    evento.id = this.eventos.length + 1;
+    this.eventos.push(evento);
+    this.guardarEventosEnLocalStorage();
+    return of(evento);
+  }
+
+  editarEvento(evento: Evento): Observable<Evento> {
+    let index = this.eventos.findIndex(e => e.id === evento.id);
+    if (index !== -1) {
+      this.eventos[index] = evento;
+      this.guardarEventosEnLocalStorage();
+      return of(evento);
+    } else {
+      return new Observable<Evento>(observer => {
+        observer.error('Evento no encontrado');
+      });
+    }
+  }
+
+  eliminarEvento(id: number): Observable<void> {
+    let index = this.eventos.findIndex(e => e.id === id);
+    if (index !== -1) {
+      this.eventos.splice(index, 1);
+      this.guardarEventosEnLocalStorage();
+      return of();
+    } else {
+      return new Observable<void>(observer => {
+        observer.error('Evento no encontrado');
+      });
+    }
+  }
+
+  private guardarEventosEnLocalStorage() {
+    localStorage.setItem('eventos', JSON.stringify(this.eventos));
+  }
+  
 }
