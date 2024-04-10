@@ -78,6 +78,10 @@ export class CalendarioComponent {
   isEntrenador(): boolean{
     return this.rol?.rol == Rol.ENTRENADOR || this.rol?.rol == Rol.ADMINISTRADOR;
   }
+  eventosDelDia(event: Evento):boolean{
+    let ano = event.inicio.substring(0,4)
+    return ano==this.model.year.toString();
+  }  
   eventoDelCliente(event: Evento): boolean{
     return event.idCliente==this.usuarioSesion?.id;
   }
