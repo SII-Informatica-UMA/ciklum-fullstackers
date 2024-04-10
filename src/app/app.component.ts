@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
-import { CommonModule, TitleCasePipe } from '@angular/common';
+import { Component, ModelFunction, inject } from '@angular/core';
+import { CommonModule, JsonPipe, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet, RouterLink, Router } from '@angular/router';
 import { UsuariosService } from './services/usuarios.service';
+import { NgbCalendar, NgbDate, NgbDatepickerModule, NgbDateStruct, NgbDatepickerNavigateEvent } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, RouterLink, FormsModule, TitleCasePipe],
+  imports: [RouterOutlet, CommonModule, RouterLink, FormsModule, TitleCasePipe,NgbDatepickerModule, JsonPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -21,7 +22,7 @@ export class AppComponent {
   get rolIndex() {
     return this._rolIndex;
   }
-
+  
   set rolIndex(i: number) {
     this._rolIndex = i;
     this.actualizarRol();

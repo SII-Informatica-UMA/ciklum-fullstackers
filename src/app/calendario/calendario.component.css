@@ -12,7 +12,10 @@ body {
     padding: 20px 0;
     margin-bottom: 20px;
 }
-
+.calendario {
+    
+    align-items: center; /* Centra verticalmente */
+}
 .container {
     max-width: 800px;
     margin: 0 auto;
