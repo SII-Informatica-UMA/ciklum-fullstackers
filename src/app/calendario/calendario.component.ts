@@ -96,13 +96,14 @@ export class CalendarioComponent {
     this.fechaSeleccionada = date;
 }
 
-
   isEntrenador(): boolean{
     return this.rol?.rol == Rol.ENTRENADOR || this.rol?.rol == Rol.ADMINISTRADOR;
   }
   eventosDelDia(event: Evento):boolean{
-    let ano = event.inicio.substring(0,4)
-    return true;//ano==this.model.year.toString();
+    let ano = this.date.year.toString();
+    let mon = this.date.month.toString();
+    let dai = this.model.day.toString();
+    return ano===event.fecha.substring(0,4) && mon===event.fecha.charAt(5) && dai===event.fecha.substring(7,9);
   }  
   eventoDelCliente(event: Evento): boolean{
     return event.idCliente==this.usuarioSesion?.id;
