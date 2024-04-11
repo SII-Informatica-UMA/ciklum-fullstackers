@@ -46,7 +46,8 @@ export class CalendarioComponent {
 
   usuarios: Usuario [] = [];
   horas: string[] = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00","15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
-  horasDisponibles: string[] = [];
+  horasDisponibles: [string, string][] = [];
+  horasDelDiaDisponibles: [string, string][] = [];
   constructor(private usuariosService: UsuariosService, private modalService: NgbModal, private backendService: BackendFakeService, private calendar:NgbCalendar) {
     this.actualizarUsuarios(); 
     this.model = this.calendar.getToday()
@@ -79,13 +80,13 @@ export class CalendarioComponent {
     };
 
     ref.componentInstance.evento = nuevoEvento;
-    ref.componentInstance.horasDisponibles = this.horasDisponibles;
+    ref.componentInstance.horasDisponibles = this.horasDisponibles.filter(hora => hora[1] == nuevoEvento.fecha);
 
     ref.result.then((resultado: { evento: Evento, horaSeleccionada: string }) => {
       this.backendService.agregarEvento(resultado.evento).subscribe(eventoGuardado => {
           this.calendarioEventos.push(eventoGuardado);
           this.calendarioEventos.sort((a, b) => a.inicio.localeCompare(b.inicio));
-          this.horasDisponibles = this.horasDisponibles.filter(hora => hora !== resultado.horaSeleccionada);
+          this.horasDisponibles = this.horasDisponibles.filter(hora => hora[0] !== resultado.horaSeleccionada);
         });
     });
   }
@@ -107,7 +108,7 @@ export class CalendarioComponent {
 
     ref.result.then((resultado: {hueco: Hueco, horaAñadida: string}) => {
       this.backendService.agregarHueco(resultado.hueco).subscribe(huecoGuardado => {
-        this.horasDisponibles.push(huecoGuardado.inicio);
+        this.horasDisponibles.push([huecoGuardado.inicio,huecoGuardado.fecha]);
         this.calendariohuecos.push(huecoGuardado);
         this.calendariohuecos.sort((a, b) => a.inicio.localeCompare(b.inicio));
           //this.horas = this.horas.filter(hora => hora !== resultado.horaAñadida);
