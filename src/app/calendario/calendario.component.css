@@ -50,8 +50,14 @@ button {
     cursor: pointer;
 }
 
+.b2 {
+    background-color:  #87EBCE;
+    color: #46c0a4;
+}
+
 button:hover {
-    background-color:  #87CEEB;
+    background-color: #87CEEB; 
+    color: white;
 }
 
 table {

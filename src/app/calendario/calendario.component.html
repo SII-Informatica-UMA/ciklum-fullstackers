@@ -18,6 +18,8 @@
         <!--<button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="aniadirEvento()">pala </button>-->
         <button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="guardarEvento()">Añadir evento</button>
         &nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="guardarHueco()">Añadir hueco</button>
+        &nbsp;&nbsp;&nbsp;
         <button type="button" class="btn btn-outline-primary bi bi-search" (click)="obtenerEvento()">Obtener evento</button>
         <br>
         <div class="calendario">
@@ -39,7 +41,7 @@
     <div class="container">
 
         <div class="container" *ngIf="isEntrenador()">
-            <div *ngFor="let evento of calendario">
+            <div *ngFor="let evento of calendarioEventos">
             <div class="card" *ngIf="eventosDelDia(evento)"> 
                 <div class="start-date">{{ evento.inicio }}</div>
 
@@ -67,8 +69,71 @@
         
         </div>
 
+
+
+
+
+        <div class="container" *ngIf="isEntrenador()">
+            <div *ngFor="let hueco of calendariohuecos">
+            <div class="card2"> 
+                <div class="start-date2">{{ hueco.inicio }}</div>
+
+                <div class="info">
+                    <p><strong>Fecha:</strong> {{ hueco.fecha }}</p>
+                    <!--<p><strong>Fecha:</strong> {{ evento.fecha }}</p>-->
+                    <p><strong>Duración (minutos):</strong> {{ hueco.duracionMinutos }}</p>
+
+                    <p><strong>Regla de Recurrencia:</strong> {{ hueco.reglaRecurrencia }}</p>
+
+                    <!--<button type="button" class="btn btn-outline-primary" (click)="editarEvento(evento.id, evento.idCliente)">Editar</button>-->
+                    <!--<button type="button" class="btn btn-outline-primary" (click)="eliminarEvento(evento.id)">Eliminar</button>-->
+
+                    
+                    <button type="button" class="btn btn-outline-primary b2">Editar</button>
+                    <button type="button" class="btn btn-outline-primary b2">Eliminar</button>
+
+                    </div>
+                </div>
+
+            </div>
+        
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="container" *ngIf="!isEntrenador()">
-            <div class="card" *ngFor="let evento of calendario"> 
+            <div class="card" *ngFor="let evento of calendarioEventos"> 
                 <div *ngIf="eventoDelCliente(evento)">
                 <div class="start-date">{{ evento.inicio }}</div>
                 <div class="info">

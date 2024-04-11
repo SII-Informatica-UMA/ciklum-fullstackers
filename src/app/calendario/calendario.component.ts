@@ -36,16 +36,21 @@ export class CalendarioComponent {
 
 
   calendarioEventos : Evento[] = [
-    {nombre: 'Evento 1', descripcion: 'Descripción del evento 1', observaciones: 'Observaciones del evento 1', lugar: 'Lugar del evento 1', duracionMinutos: 60, inicio: '00:00', reglaRecurrencia: 'Regla de recurrencia del evento 1', idCliente: 3, id: 1},
-  ]
+    {nombre: 'Evento 1', descripcion: 'Descripción del evento 1', observaciones: 'Observaciones del evento 1', lugar: 'Lugar del evento 1', duracionMinutos: 60, inicio: '00:00', reglaRecurrencia: 'Regla de recurrencia del evento 1', idCliente: 3, id: 1,
+    fecha: ''}
+  ];
   calendariohuecos : Hueco[] = [
-    {duracionMinutos: 60, inicio: '00:00', reglaRecurrencia: 'Regla de recurrencia del evento 1'},
-  ]
+    {duracionMinutos: 60, inicio: '00:00', reglaRecurrencia: 'Regla de recurrencia del evento 1',fecha: ''}
+  ];
   
+
   usuarios: Usuario [] = [];
   horas: string[] = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00","15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
   horasDisponibles: string[] = [];
-  constructor(private usuariosService: UsuariosService, private modalService: NgbModal, private backendService: BackendFakeService, private calendar:NgbCalendar) {this.actualizarUsuarios(); this.model = this.calendar.getToday()}
+  constructor(private usuariosService: UsuariosService, private modalService: NgbModal, private backendService: BackendFakeService, private calendar:NgbCalendar) {
+    this.actualizarUsuarios(); 
+    this.model = this.calendar.getToday()
+  }
 
   obtenerEvento(): void {
     const id = parseInt(prompt('Introduce el ID del evento:') || '');
@@ -59,7 +64,6 @@ export class CalendarioComponent {
   guardarEvento(): void {
     let ref = this.modalService.open(FormularioEventoComponent);
     ref.componentInstance.accion = "Añadir";
-    
     // Crea un nuevo evento y asigna la fecha
     let nuevoEvento: Evento = {
       nombre: '',
@@ -78,21 +82,26 @@ export class CalendarioComponent {
     ref.componentInstance.horasDisponibles = this.horasDisponibles;
 
     ref.result.then((resultado: { evento: Evento, horaSeleccionada: string }) => {
-      this.backendService.agregarEvento(resultado.evento)
-        .subscribe(eventoGuardado => {
-          this.calendario.push(eventoGuardado);
-          this.calendario.sort((a, b) => a.inicio.localeCompare(b.inicio));
+      this.backendService.agregarEvento(resultado.evento).subscribe(eventoGuardado => {
+          this.calendarioEventos.push(eventoGuardado);
+          this.calendarioEventos.sort((a, b) => a.inicio.localeCompare(b.inicio));
           this.horasDisponibles = this.horasDisponibles.filter(hora => hora !== resultado.horaSeleccionada);
         });
     });
   }
-  onDateSelect(date: NgbDate): void {
-    this.fechaSeleccionada = date;
-}
+
   guardarHueco(): void {
     let ref = this.modalService.open(FormularioHuecoComponent);
     ref.componentInstance.accion = "Añadir";
-    ref.componentInstance.hueco = {duracionMinutos: 0, inicio: '', reglaRecurrencia: ''};
+        // Crea un nuevo hueco y asigna la fecha
+    let nuevoHueco: Hueco = {
+      duracionMinutos: 0,
+      inicio: '',
+      reglaRecurrencia: '',
+      fecha: `${this.model.year}-${this.model.month}-${this.model.day}`
+    };
+
+    ref.componentInstance.hueco = nuevoHueco;
     ref.componentInstance.horas = this.horas;
 
     ref.result.then((resultado: {hueco: Hueco, horaAñadida: string}) => {
@@ -105,25 +114,14 @@ export class CalendarioComponent {
     });
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  onDateSelect(date: NgbDate): void {
+    this.fechaSeleccionada = date;
+  }
 
   isEntrenador(): boolean{
     return this.rol?.rol == Rol.ENTRENADOR || this.rol?.rol == Rol.ADMINISTRADOR;
   }
+
   eventosDelDia(event: Evento):boolean{
     let ano = this.date.year.toString();
     let mon = this.date.month.toString();
@@ -137,7 +135,23 @@ export class CalendarioComponent {
     }else{
       return ano===event.fecha.substring(0,4) && mon===event.fecha.charAt(5) && dai===event.fecha.charAt(7);
     }
-  }  
+  }
+
+  huecosDelDia(hueco: Hueco):boolean{
+    let ano = this.date.year.toString();
+    let mon = this.date.month.toString();
+    let dai = this.model.day.toString();
+    if(mon.length>1 && dai.length>1){
+      return ano===hueco.fecha.substring(0,4) && mon===hueco.fecha.substring(5,7) && dai===hueco.fecha.substring(8,10);;
+    }else if(mon.length>1){
+      return ano===hueco.fecha.substring(0,4) && mon===hueco.fecha.substring(5,7) && dai===hueco.fecha.charAt(8);
+    }else if(dai.length>1){
+      return ano===hueco.fecha.substring(0,4) && mon===hueco.fecha.charAt(5) && dai===hueco.fecha.substring(7,9);
+    }else{
+      return ano===hueco.fecha.substring(0,4) && mon===hueco.fecha.charAt(5) && dai===hueco.fecha.charAt(7);
+    }
+  }
+
   eventoDelCliente(event: Evento): boolean{
     return event.idCliente==this.usuarioSesion?.id;
   }
@@ -152,6 +166,7 @@ export class CalendarioComponent {
   get usuarioSesion() {
     return this.usuariosService.getUsuarioSesion();
   }
+
   editarEvento(eventoId: number, clienteId: number): void {
     if(this.isEntrenador() || this.usuarioSesion?.id==clienteId){
     const eventoEditar = this.calendarioEventos.find(evento => evento.id === eventoId);
@@ -172,10 +187,10 @@ export class CalendarioComponent {
     
   }
   eliminarEvento(id: number): Observable<void> {
-    const index = this.calendario.findIndex(evento => evento.id === id);
+    const index = this.calendarioEventos.findIndex(evento => evento.id === id);
     if (index !== -1) {
-      this.calendario.splice(index, 1);
-      localStorage.setItem('eventos', JSON.stringify(this.calendario));
+      this.calendarioEventos.splice(index, 1);
+      localStorage.setItem('eventos', JSON.stringify(this.calendarioEventos));
       return of();
     } else {
       return new Observable<void>(observer => {
@@ -183,4 +198,6 @@ export class CalendarioComponent {
       });
     }
   }
+  eliminarHueco(huecoId: number): void {  }
+  editarHueco(huecoId: number): void {  }
 }

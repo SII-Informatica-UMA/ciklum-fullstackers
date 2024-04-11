@@ -23,7 +23,6 @@ export class FormularioEventoComponent {
     this.fechaSeleccionada = null; // Inicialización como null
 }
 
-  //horasDisponibles: string[] = this.modal.horasDisponibles;
   onDateSelect(date: NgbDate) {
     console.log(date);
   }
@@ -37,8 +36,5 @@ export class FormularioEventoComponent {
         // Si falta el nombre del evento o la fecha, muestra un mensaje de error
         console.error("Nombre y Fecha son campos obligatorios");
     }
-}
-
-
-
+  }
 }
