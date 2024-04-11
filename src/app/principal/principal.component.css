@@ -74,3 +74,26 @@ td {
     color: #4682B4;
     font-weight: bold;
 }
+/* Estilo para el encabezado */
+h4 {
+    color: #4682B4; /* Color del texto */
+    background-color:  #87CEEB;
+    font-size: 24px; /* Tamaño del texto */
+    padding: 20px 0;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo para los enlaces */
+  a {
+    color: #4682B4; /* Color del texto */
+    text-decoration: none; /* Quita el subrayado predeterminado */
+    font-size: 18px; /* Tamaño del texto */
+    display: block; /* Hace que los enlaces sean bloques, ocupando toda la anchura disponible */
+    margin-bottom: 5px; /* Margen inferior */
+  }
+  
+  /* Estilo para los enlaces cuando están siendo "hovered" */
+  a:hover {
+    text-decoration: underline; /* Subraya el enlace al pasar el ratón sobre él */
+  }
+  

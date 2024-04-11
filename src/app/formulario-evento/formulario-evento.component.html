@@ -16,7 +16,7 @@
         <label for="lugar">Lugar:</label>
         <input class="form-control" id="lugar" [(ngModel)]="evento.lugar" placeholder="lugar">
         <label for="duracionMinutos">Duración (minutos):</label>
-        <input class="form-control" id="duracionMinutos" [(ngModel)]="evento.duracionMinutos" placeholder="duracion">
+        <input class="form-control" id="duracionMinutos" [(ngModel)]="evento.duracionMinutos" placeholder=60>
 
         <label for="hora">Inicio:</label>
         <select id="hora" class="form-control" [(ngModel)]="evento.inicio" name="inicio">
@@ -24,10 +24,10 @@
           <option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</option>
         </select>
 
-        <label for="reglaRecurrencia">Recurrencia:</label>
+        <!--<label for="reglaRecurrencia">Recurrencia:</label>
         <input class="form-control" id="reglaRecurrencia" [(ngModel)]="evento.reglaRecurrencia" placeholder="Recurrencia">
         <label for="idCliente">Cliente:</label>
-        <input class="form-control" id="idCliente" [(ngModel)]="evento.idCliente" placeholder="idCliente">
+        <input class="form-control" id="idCliente" [(ngModel)]="evento.idCliente" placeholder="idCliente">-->
         
   
     </div>

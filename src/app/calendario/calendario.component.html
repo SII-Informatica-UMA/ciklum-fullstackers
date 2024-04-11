@@ -14,7 +14,7 @@
 
     <div class="container">
 
-        <label for="monthInput">Mes:</label>
+        <label for="monthInput">Calendario:</label>
         <!--<button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="aniadirEvento()">pala </button>-->
         <button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="guardarEvento()">Añadir evento</button>
         &nbsp;&nbsp;&nbsp;
@@ -28,14 +28,11 @@
 
                         <button class="btn btn-sm btn-outline-primary me-2" (click)="model = today">Select Today</button>
                         <button class="btn btn-sm btn-outline-primary me-2" (click)="dp.navigateTo()">To current month</button>
-                        <button class="btn btn-sm btn-outline-primary me-2" (click)="dp.navigateTo({ year: 2013, month: 2 })"
-                          >To Feb 2013</button
-                        >
 
                         <hr />
 
-                        <pre>Month: {{ date.month }}.{{ date.year }}</pre>
-                        <pre>Model: {{ model | json }}</pre>
+                        <!--<pre>Month: {{ date.month }}.{{ date.year }}</pre>
+                        <pre>Model: {{ model | json }}</pre>-->
         </div>
     </div>
     <div class="container">
@@ -83,7 +80,7 @@
 
                     <p><strong>Duración (minutos):</strong> {{ evento.duracionMinutos }}</p>
 
-                    <p><strong>Regla de Recurrencia:</strong> {{ evento.reglaRecurrencia }}</p>
+                    <!--<p><strong>Regla de Recurrencia:</strong> {{ evento.reglaRecurrencia }}</p>-->
 
                     <p><strong>ID Cliente:</strong> {{ evento.idCliente }}</p>
 

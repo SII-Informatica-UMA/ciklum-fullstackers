@@ -6,17 +6,23 @@
     <div class="form-group">
       <label for="fecha">Fecha:</label>
         <p>{{hueco.fecha}}</p>
-        <label for="duracionMinutos">Duración (minutos):</label>
-        <input class="form-control" id="duracionMinutos" [(ngModel)]="hueco.duracionMinutos" placeholder="duracion">
-
         <label for="hora">Inicio:</label>
         <select id="hora" class="form-control" [(ngModel)]="hueco.inicio" name="inicio">
           <option value="">Selecciona una hora...</option>
           <option *ngFor="let hora of horas" [value]="hora">{{ hora }}</option>
         </select>
 
+        <label for="duracionMinutos">Duración (minutos):</label>
+        <input class="form-control" id="duracionMinutos" [(ngModel)]="hueco.duracionMinutos" placeholder="duracion">
+
         <label for="reglaRecurrencia">Recurrencia:</label>
-        <input class="form-control" id="reglaRecurrencia" [(ngModel)]="hueco.reglaRecurrencia" placeholder="Recurrencia">
+        <select id="reglaRecurrencia" class="form-control" [(ngModel)]="hueco.reglaRecurrencia" name="reglaRecurrencia">
+          <option value="">Selecciona una recurrencia...</option>
+          <option value="Diaria">Diaria</option>
+          <option value="Semanal">Semanal</option>
+          <option value="Mensual">Mensual</option>
+        </select>
+
     </div>
   </div>
   <div class="modal-footer">

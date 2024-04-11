@@ -17,7 +17,7 @@ export class FormularioHuecoComponent {
   fechaSeleccionada: NgbDate | null = null
 
   accion?: "Añadir" | "Editar";
-  hueco: Hueco = {id:1,duracionMinutos: 0, inicio: '', reglaRecurrencia: '', fecha: ''};
+  hueco: Hueco = {id:1,duracionMinutos: 60, inicio: '', reglaRecurrencia: '', fecha: ''};
 
   constructor(public modal: NgbActiveModal) { 
     this.fechaSeleccionada = null;
@@ -28,7 +28,13 @@ export class FormularioHuecoComponent {
   }
 
   guardarHueco(): void {
-    if (this.hueco.fecha) {
+    if(this.hueco.fecha && this.hueco.reglaRecurrencia === 'Diaria') {
+      // Si la fecha y la regla de recurrencia están presentes, procede a guardar
+      
+      console.log("Hueco guardado:", this.hueco);
+      this.modal.close({hueco: this.hueco,fechaSeleccionada: this.fechaSeleccionada, horaSeleccionada: this.hueco.inicio});
+    
+    }else if (this.hueco.fecha) {
       // Si la fecha está presentes, procede a guardar
       console.log("Hueco guardado:", this.hueco);
       this.modal.close({hueco: this.hueco, horaSeleccionada: this.hueco.inicio});

@@ -17,7 +17,7 @@ export class FormularioEventoComponent {
   fechaSeleccionada: NgbDate | null = null;
 
   accion?: "Añadir" | "Editar";
-  evento: Evento = {nombre: '', descripcion: '', observaciones: '', lugar: '', duracionMinutos: 0, inicio: '', reglaRecurrencia: '', idCliente: 0, id: 0, fecha: ''};
+  evento: Evento = {nombre: '', descripcion: '', observaciones: '', lugar: '', duracionMinutos: 60, inicio: '', reglaRecurrencia: '', idCliente: 0, id: 0, fecha: ''};
 
   constructor(public modal: NgbActiveModal) {   
     this.fechaSeleccionada = null; // Inicialización como null
