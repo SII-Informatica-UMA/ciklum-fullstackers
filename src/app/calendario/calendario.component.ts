@@ -11,7 +11,9 @@ import { BackendFakeService } from '../services/backend.fake.service';
 import { NgbCalendar, NgbDate, NgbDatepickerModule, NgbDateStruct, NgbDatepickerNavigateEvent } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, NgModel } from '@angular/forms';
 import { EventosService } from '../services/eventos.service';
- 
+ import { FormularioHuecoComponent } from '../formulario-hueco/formulario-hueco.component';
+import { Hueco } from './hueco.model';
+
 @Component({
   selector: 'app-calendario',
   standalone: true,
@@ -33,31 +35,23 @@ export class CalendarioComponent {
   }
 
 
-  calendario : Evento[] = [
-    {nombre: 'Evento 1', descripcion: 'Descripción del evento 1', observaciones: 'Observaciones del evento 1', lugar: 'Lugar del evento 1', duracionMinutos: 60, inicio: '2021-01-01T00:00:00', reglaRecurrencia: 'Regla de recurrencia del evento 1', idCliente: 3, id: 1,fecha: ''},
+  calendarioEventos : Evento[] = [
+    {nombre: 'Evento 1', descripcion: 'Descripción del evento 1', observaciones: 'Observaciones del evento 1', lugar: 'Lugar del evento 1', duracionMinutos: 60, inicio: '00:00', reglaRecurrencia: 'Regla de recurrencia del evento 1', idCliente: 3, id: 1},
   ]
+  calendariohuecos : Hueco[] = [
+    {duracionMinutos: 60, inicio: '00:00', reglaRecurrencia: 'Regla de recurrencia del evento 1'},
+  ]
+  
   usuarios: Usuario [] = [];
-  horasDisponibles: string[] = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
-  constructor(
-    private usuariosService: UsuariosService,
-    private modalService: NgbModal,
-    private backendService: BackendFakeService,
-    private calendar:NgbCalendar,
-    private eventoService: EventosService) {this.actualizarUsuarios(); 
-      this.model = this.calendar.getToday();
-      let _eventos = localStorage.getItem('eventos');
-    if (_eventos) {
-      this.calendario = JSON.parse(_eventos);
-    } else {
-      this.calendario = [];
-    }
-    }
+  horas: string[] = ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00","15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
+  horasDisponibles: string[] = [];
+  constructor(private usuariosService: UsuariosService, private modalService: NgbModal, private backendService: BackendFakeService, private calendar:NgbCalendar) {this.actualizarUsuarios(); this.model = this.calendar.getToday()}
 
   obtenerEvento(): void {
     const id = parseInt(prompt('Introduce el ID del evento:') || '');
-    const evento = this.calendario.filter(e => e.id === id);
+    const evento = this.calendarioEventos.filter(e => e.id === id);
     if (evento.length > 0) {
-      this.calendario = this.calendario.filter(e => e.id === id);
+      this.calendarioEventos = this.calendarioEventos.filter(e => e.id === id);
     } else {
       alert('No se encontró ningún evento con el ID proporcionado.');
     }
@@ -95,6 +89,37 @@ export class CalendarioComponent {
   onDateSelect(date: NgbDate): void {
     this.fechaSeleccionada = date;
 }
+  guardarHueco(): void {
+    let ref = this.modalService.open(FormularioHuecoComponent);
+    ref.componentInstance.accion = "Añadir";
+    ref.componentInstance.hueco = {duracionMinutos: 0, inicio: '', reglaRecurrencia: ''};
+    ref.componentInstance.horas = this.horas;
+
+    ref.result.then((resultado: {hueco: Hueco, horaAñadida: string}) => {
+      this.backendService.agregarHueco(resultado.hueco).subscribe(huecoGuardado => {
+        this.horasDisponibles.push(huecoGuardado.inicio);
+        this.calendariohuecos.push(huecoGuardado);
+        this.calendariohuecos.sort((a, b) => a.inicio.localeCompare(b.inicio));
+          //this.horas = this.horas.filter(hora => hora !== resultado.horaAñadida);
+      });
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   isEntrenador(): boolean{
     return this.rol?.rol == Rol.ENTRENADOR || this.rol?.rol == Rol.ADMINISTRADOR;
@@ -129,7 +154,7 @@ export class CalendarioComponent {
   }
   editarEvento(eventoId: number, clienteId: number): void {
     if(this.isEntrenador() || this.usuarioSesion?.id==clienteId){
-    const eventoEditar = this.calendario.find(evento => evento.id === eventoId);
+    const eventoEditar = this.calendarioEventos.find(evento => evento.id === eventoId);
     if (eventoEditar) {
       let ref = this.modalService.open(FormularioEventoComponent);
       ref.componentInstance.accion = "Editar";
@@ -137,9 +162,9 @@ export class CalendarioComponent {
 
       ref.result.then((resultado: { evento: Evento }) => {
         // Actualizamos el evento en la lista
-        const index = this.calendario.findIndex(evento => evento.id === eventoId);
+        const index = this.calendarioEventos.findIndex(evento => evento.id === eventoId);
         if (index !== -1) {
-          this.calendario[index] = { ...resultado.evento }; // Actualizamos el evento con los datos del formulario
+          this.calendarioEventos[index] = { ...resultado.evento }; // Actualizamos el evento con los datos del formulario
         }
       });
     }

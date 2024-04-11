@@ -11,6 +11,7 @@ import { NgFor } from '@angular/common';
   templateUrl: './formulario-evento.component.html',
   styleUrl: './formulario-evento.component.css'
 })
+
 export class FormularioEventoComponent {
   @Input() horasDisponibles: string[] = [];
   fechaSeleccionada: NgbDate | null = null;

@@ -17,6 +17,8 @@ body {
     text-align: center;
     align-items: center; /* Centra verticalmente */
 }
+
+
 .container {
     max-width: 800px;
     margin: 0 auto;
@@ -87,10 +89,26 @@ td {
     width: 100%;
     display: flex;
 }
+.card2 {
+    background-color: #87EBCE;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+}
 
 .start-date {
     font-size: 24px;
     color: #4682B4;
+    margin-right: 20px;
+    align-self: flex-start;
+}
+
+.start-date2 {
+    font-size: 24px;
+    color:  #46c0a4;
     margin-right: 20px;
     align-self: flex-start;
 }

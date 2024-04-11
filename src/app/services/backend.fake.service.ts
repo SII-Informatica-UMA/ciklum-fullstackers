@@ -6,9 +6,9 @@ import { from } from "rxjs";
 import * as jose from 'jose';
 import { FRONTEND_URI } from "../config/config";
 import { Evento } from "../calendario/evento.model";
+import { Hueco } from "../calendario/hueco.model";
 
 // Este servicio imita al backend pero utiliza localStorage para almacenar los datos
-
 const usuariosC: Usuario [] = [
   {
     id: 1,
@@ -19,7 +19,7 @@ const usuariosC: Usuario [] = [
     administrador: true,
     password: 'admin',
     entrenador: true,
-    eventos: []
+    eventos: [],
   },
   {
     id: 2,
@@ -29,7 +29,7 @@ const usuariosC: Usuario [] = [
     email: 'antonio@uma.es',
     administrador: false,
     password: '5678',
-    entrenador: true,
+    entrenador: false,
     eventos: []
   },
 ];
@@ -41,6 +41,7 @@ export class BackendFakeService {
   private usuarios: Usuario [];
   private forgottenPasswordTokens;
   private  eventos: Evento[] = [];
+  private huecos: Hueco[] = [];
 
   constructor() {
     let _usuarios = localStorage.getItem('usuarios');
@@ -200,6 +201,12 @@ export class BackendFakeService {
     this.guardarEventosEnLocalStorage();
     return of(evento);
   }
+  
+  agregarHueco(hueco: Hueco): Observable<Hueco> {
+    this.huecos.push(hueco);
+    this.guardarHuecosEnLocalStorage();
+    return of(hueco);
+  }
 
   editarEvento(evento: Evento): Observable<Evento> {
     let index = this.eventos.findIndex(e => e.id === evento.id);
@@ -229,6 +236,9 @@ export class BackendFakeService {
 
   private guardarEventosEnLocalStorage() {
     localStorage.setItem('eventos', JSON.stringify(this.eventos));
+  }
+  private guardarHuecosEnLocalStorage() {
+    localStorage.setItem('huecos', JSON.stringify(this.huecos));
   }
   
 }
