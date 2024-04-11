@@ -21,6 +21,7 @@ import { EventosService } from '../services/eventos.service';
 })
 export class CalendarioComponent {
 
+  fechaSeleccionada: NgbDate | null = null; // Define fechaSeleccionada
   
   today = inject(NgbCalendar).getToday();
 
@@ -91,6 +92,9 @@ export class CalendarioComponent {
         });
     });
   }
+  onDateSelect(date: NgbDate): void {
+    this.fechaSeleccionada = date;
+}
 
 
   isEntrenador(): boolean{
