@@ -18,7 +18,7 @@
         <!--<button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="aniadirEvento()">pala </button>-->
         <button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="guardarEvento()">Añadir evento</button>
         &nbsp;&nbsp;&nbsp;
-        <button type="button" class="btn btn-outline-primary bi bi-plus-lg" (click)="guardarHueco()">Añadir hueco</button>
+        <button type="button" class="btn btn-outline-primary bi bi-plus-lg b2" (click)="guardarHueco()" *ngIf="isEntrenador()">Añadir hueco</button>
         &nbsp;&nbsp;&nbsp;
         <button type="button" class="btn btn-outline-primary bi bi-search" (click)="obtenerEvento()">Obtener evento</button>
         <br>
@@ -67,15 +67,39 @@
 
             </div>
         
+
+        <div class="container" *ngIf="!isEntrenador()">
+            <div class="card" *ngFor="let evento of calendarioEventos"> 
+                <div *ngIf="eventoDelCliente(evento)">
+                <div class="start-date">{{ evento.inicio }}</div>
+                <div class="info">
+                    <h2>{{ evento.nombre }}</h2>
+
+                    <p><strong>Descripción:</strong> {{ evento.descripcion }}</p>
+
+                    <p><strong>Observaciones:</strong> {{ evento.observaciones }}</p>
+
+                    <p><strong>Lugar:</strong> {{ evento.lugar }}</p>
+
+                    <p><strong>Duración (minutos):</strong> {{ evento.duracionMinutos }}</p>
+
+                    <p><strong>Regla de Recurrencia:</strong> {{ evento.reglaRecurrencia }}</p>
+
+                    <p><strong>ID Cliente:</strong> {{ evento.idCliente }}</p>
+
+                    <p><strong>ID:</strong> {{ evento.id }}</p>
+
+                </div>
+                </div>
+                <button type="button" class="btn btn-outline-primary" (click)="editarEvento(evento.id, evento.idCliente)">Editar</button>
+                <button type="button" class="btn btn-outline-primary" (click)="eliminarEvento(evento.id)">Eliminar</button>
+            </div>
         </div>
 
-
-
-
-
-        <div class="container" *ngIf="isEntrenador()">
+        <div *ngIf="isEntrenador()">
             <div *ngFor="let hueco of calendariohuecos">
-            <div class="card2"> 
+                
+            <div class="card2 " *ngIf="huecosDelDia(hueco)"> 
                 <div class="start-date2">{{ hueco.inicio }}</div>
 
                 <div class="info">
@@ -89,23 +113,18 @@
                     <!--<button type="button" class="btn btn-outline-primary" (click)="eliminarEvento(evento.id)">Eliminar</button>-->
 
                     
-                    <button type="button" class="btn btn-outline-primary b2">Editar</button>
-                    <button type="button" class="btn btn-outline-primary b2">Eliminar</button>
+                    <button type="button" class="btn btn-outline-primary b2" (click)="editarHueco(hueco.id,obtenerIdCliente(hueco))">Editar</button>
+                    <button type="button" class="btn btn-outline-primary b2" (click)="eliminarHueco(hueco.id)">Eliminar</button>
 
                     </div>
+                
                 </div>
 
             </div>
         
         </div>
 
-
-
-
-
-
-
-
+    </div>
 
 
 

@@ -40,7 +40,7 @@ export class CalendarioComponent {
     fecha: ''}
   ];
   calendariohuecos : Hueco[] = [
-    {duracionMinutos: 60, inicio: '00:00', reglaRecurrencia: 'Regla de recurrencia del evento 1',fecha: ''}
+    {id:1,duracionMinutos: 60, inicio: '00:00', reglaRecurrencia: 'Regla de recurrencia del evento 1',fecha: ''}
   ];
   
 
@@ -95,6 +95,7 @@ export class CalendarioComponent {
     ref.componentInstance.accion = "Añadir";
         // Crea un nuevo hueco y asigna la fecha
     let nuevoHueco: Hueco = {
+      id: 0,
       duracionMinutos: 0,
       inicio: '',
       reglaRecurrencia: '',
@@ -166,6 +167,7 @@ export class CalendarioComponent {
   get usuarioSesion() {
     return this.usuariosService.getUsuarioSesion();
   }
+ 
 
   editarEvento(eventoId: number, clienteId: number): void {
     if(this.isEntrenador() || this.usuarioSesion?.id==clienteId){
@@ -198,6 +200,39 @@ export class CalendarioComponent {
       });
     }
   }
-  eliminarHueco(huecoId: number): void {  }
-  editarHueco(huecoId: number): void {  }
+  editarHueco(huecoId: number, clienteId: number): void {
+    // Verificar si el usuario es un entrenador o si el usuario en sesión es el cliente relacionado con el hueco
+    if (this.isEntrenador() || this.usuarioSesion?.id === clienteId) {
+      const huecoEditar = this.calendariohuecos.find(hueco => hueco.id === huecoId);
+      if (huecoEditar) {
+        let ref = this.modalService.open(FormularioHuecoComponent);
+        ref.componentInstance.accion = "Editar";
+        ref.componentInstance.hueco = { ...huecoEditar }; // Pasamos una copia del hueco para no modificar el original directamente
+  
+        ref.result.then((resultado: { hueco: Hueco }) => {
+          // Actualizamos el hueco en la lista
+          const index = this.calendariohuecos.findIndex(hueco => hueco.id === huecoId);
+          if (index !== -1) {
+            this.calendariohuecos[index] = { ...resultado.hueco }; // Actualizamos el hueco con los datos del formulario
+          }
+        });
+      }
+    }
+  }
+  
+  // En tu componente TypeScript
+obtenerIdCliente(hueco: Hueco): number {
+  // Encuentra el evento relacionado con este hueco
+  const eventoRelacionado = this.calendarioEventos.find(evento => evento.fecha === hueco.fecha && evento.inicio === hueco.inicio);
+  // Retorna el idCliente del evento si se encuentra, de lo contrario, retorna 0 o cualquier valor predeterminado que desees
+  return eventoRelacionado ? eventoRelacionado.idCliente : 0;
+}
+
+  eliminarHueco(huecoId: number): void {
+    const index = this.calendariohuecos.findIndex(hueco => hueco.id === huecoId);
+    if (index !== -1) {
+      this.calendariohuecos.splice(index, 1);
+      // Puedes añadir aquí cualquier lógica adicional, como actualizar la base de datos
+    }
+  }
 }

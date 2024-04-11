@@ -15,9 +15,9 @@ import { Hueco } from '../calendario/hueco.model';
 export class FormularioHuecoComponent {
   @Input() horas: string[] = [];
   fechaSeleccionada: NgbDate | null = null
-  
+
   accion?: "Añadir" | "Editar";
-  hueco: Hueco = {duracionMinutos: 0, inicio: '', reglaRecurrencia: '', fecha: ''};
+  hueco: Hueco = {id:1,duracionMinutos: 0, inicio: '', reglaRecurrencia: '', fecha: ''};
 
   constructor(public modal: NgbActiveModal) { 
     this.fechaSeleccionada = null;
