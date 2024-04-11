@@ -103,7 +103,15 @@ export class CalendarioComponent {
     let ano = this.date.year.toString();
     let mon = this.date.month.toString();
     let dai = this.model.day.toString();
-    return ano===event.fecha.substring(0,4) && mon===event.fecha.charAt(5) && dai===event.fecha.substring(7,9);
+    if(mon.length>1 && dai.length>1){
+      return ano===event.fecha.substring(0,4) && mon===event.fecha.substring(5,7) && dai===event.fecha.substring(8,10);;
+    }else if(mon.length>1){
+      return ano===event.fecha.substring(0,4) && mon===event.fecha.substring(5,7) && dai===event.fecha.charAt(8);
+    }else if(dai.length>1){
+      return ano===event.fecha.substring(0,4) && mon===event.fecha.charAt(5) && dai===event.fecha.substring(7,9);
+    }else{
+      return ano===event.fecha.substring(0,4) && mon===event.fecha.charAt(5) && dai===event.fecha.charAt(7);
+    }
   }  
   eventoDelCliente(event: Evento): boolean{
     return event.idCliente==this.usuarioSesion?.id;
