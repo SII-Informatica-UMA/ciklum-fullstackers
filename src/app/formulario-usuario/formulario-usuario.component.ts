@@ -31,9 +31,9 @@ export class FormularioUsuarioComponent {
     return Math.floor(Math.random() * max);
   }
   guardarUsuario(): void {
-    if(this._usuario.entrenador!=true)
+    if(this.accion === "Añadir" && !this._usuario.entrenador)
       this._usuario.id=this.getRandomInt(1000);
-    if (this._usuario.password != this.rpassword) {
+    if (this._usuario.password !== this.rpassword) {
       this.error="Las contraseñas no coinciden";
       return;
     }

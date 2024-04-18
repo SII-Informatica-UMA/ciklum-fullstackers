@@ -14,7 +14,7 @@ import { NgFor } from '@angular/common';
 export class FormularioEventoComponent {
   @Input() horasDisponibles: string[] = [];
   accion?: "Añadir" | "Editar";
-  evento: Evento = {nombre: '', descripcion: '', observaciones: '', lugar: '', duracionMinutos: 0, inicio: '', reglaRecurrencia: '', idCliente: 0, id: 0};
+  evento: Evento = {nombre: '', descripcion: '', observaciones: '', lugar: '', duracionMinutos: 0, inicio: '', reglaRecurrencia: '', idCliente: 0, id: 0, fecha: new Date()};
 
   constructor(public modal: NgbActiveModal) { }
 
