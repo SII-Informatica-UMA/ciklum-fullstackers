@@ -1,6 +1,7 @@
 package entidades;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -9,8 +10,11 @@ import jakarta.persistence.Id;
 public class Hueco {
     
     @Id @GeneratedValue
+    @Column(name = "DURACION_MINUTOS" , nullable = false, length = 50)
     private Long duracionMinutos;
+    @Column(name = "FECHA_INICIO" , nullable = false, length = 50)
     private String fechaHoraInicio;
+    @Column(name = "RECURRENCIA" , nullable = false, length = 50)
     private String reglaRecurrencia;
 
     public Long getDuracionMinutos() {

@@ -1,5 +1,6 @@
 package entidades;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -8,12 +9,19 @@ import jakarta.persistence.Id;
 public class Evento {
 
     @Id @GeneratedValue
+    @Column(name = "ID" , nullable = false, length = 50)
+    private Long id;
+    @Column(name = "NOMBRE" , nullable = false, length = 50)
     private String nombre;
+    @Column(name = "DESCRIPCION" , nullable = false, length = 50)
     private String descripcion;   
+    @Column(name = "OBSERVACIONES" , nullable = false, length = 50)
     private String observaciones;
+    @Column(name = "LUGAR" , nullable = false, length = 50)
     private String lugar;
-
+    @Column(name = "DURACION_MINUTOS" , nullable = false, length = 50)
     private Long duracionMinutos;
+    @Column(name = "FECHA_INICIO" , nullable = false, length = 50)
     private String fechaHoraInicio;
 
     public String getNombre() {
