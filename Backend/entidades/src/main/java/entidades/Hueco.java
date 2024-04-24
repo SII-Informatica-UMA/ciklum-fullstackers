@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
+@Table(name = "HUECO") 
 public class Hueco {
     
     @Id @GeneratedValue
@@ -16,6 +17,17 @@ public class Hueco {
     private String fechaHoraInicio;
     @Column(name = "RECURRENCIA" , nullable = false, length = 50)
     private String reglaRecurrencia;
+
+// Constructor vacío
+    public Hueco() {
+    }
+
+    // Constructor con todos los atributos
+    public Hueco(Long duracionMinutos, String fechaHoraInicio, String reglaRecurrencia) {
+        this.duracionMinutos = duracionMinutos;
+        this.fechaHoraInicio = fechaHoraInicio;
+        this.reglaRecurrencia = reglaRecurrencia;
+    }
 
     public Long getDuracionMinutos() {
         return duracionMinutos;

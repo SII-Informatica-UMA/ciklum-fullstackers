@@ -1,29 +1,53 @@
 package entidades;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
 
 @Entity
+@Table(name = "EVENTO") 
+
 public class Evento {
 
     @Id @GeneratedValue
-    @Column(name = "ID" , nullable = false, length = 50)
-    private Long id;
-    @Column(name = "NOMBRE" , nullable = false, length = 50)
-    private String nombre;
-    @Column(name = "DESCRIPCION" , nullable = false, length = 50)
-    private String descripcion;   
-    @Column(name = "OBSERVACIONES" , nullable = false, length = 50)
-    private String observaciones;
-    @Column(name = "LUGAR" , nullable = false, length = 50)
-    private String lugar;
-    @Column(name = "DURACION_MINUTOS" , nullable = false, length = 50)
-    private Long duracionMinutos;
-    @Column(name = "FECHA_INICIO" , nullable = false, length = 50)
-    private String fechaHoraInicio;
+private Long id;
 
+@Column(name="NOMBRE", nullable=false, length=50)
+private String nombre;
+
+@Column(name="DESCRIPCION", nullable=false, length=50)
+private String descripcion;
+
+@Column(name="OBSERVACIONES", nullable=false, length=50)
+private String observaciones;
+
+@Column(name="LUGAR", nullable=false, length=50)
+private String lugar;
+
+@Column(name="DURACION_MINUTOS", nullable=false)
+private Long duracionMinutos;
+
+@Column(name="FECHA_HORA_INICIO", nullable=false, length=50)
+private String fechaHoraInicio;
+
+
+    // Constructor vacío
+    public Evento() {
+    }
+
+    // Constructor con todos los atributos
+    public Evento(Long id, String nombre, String descripcion, String observaciones, String lugar, Long duracionMinutos, String fechaHoraInicio) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.observaciones = observaciones;
+        this.lugar = lugar;
+        this.duracionMinutos = duracionMinutos;
+        this.fechaHoraInicio = fechaHoraInicio;
+    }
+    
     public String getNombre() {
         return nombre;
     }
