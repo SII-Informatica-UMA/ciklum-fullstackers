@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 
 @Entity
@@ -98,15 +101,7 @@ private String fechaHoraInicio;
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
-        result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
-        result = prime * result + ((observaciones == null) ? 0 : observaciones.hashCode());
-        result = prime * result + ((lugar == null) ? 0 : lugar.hashCode());
-        result = prime * result + ((duracionMinutos == null) ? 0 : duracionMinutos.hashCode());
-        result = prime * result + ((fechaHoraInicio == null) ? 0 : fechaHoraInicio.hashCode());
-        return result;
+        return Objects.hash(descripcion, duracionMinutos, fechaHoraInicio, lugar, nombre, observaciones);
     }
 
     @Override

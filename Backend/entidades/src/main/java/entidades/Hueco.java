@@ -1,6 +1,8 @@
 package entidades;
 
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -56,12 +58,7 @@ public class Hueco {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((duracionMinutos == null) ? 0 : duracionMinutos.hashCode());
-        result = prime * result + ((fechaHoraInicio == null) ? 0 : fechaHoraInicio.hashCode());
-        result = prime * result + ((reglaRecurrencia == null) ? 0 : reglaRecurrencia.hashCode());
-        return result;
+        return Objects.hash(duracionMinutos, fechaHoraInicio, reglaRecurrencia);
     }
 
     @Override

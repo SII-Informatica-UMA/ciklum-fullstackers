@@ -1,8 +1,7 @@
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
+import entidades.Evento;
+import jakarta.transaction.Transactional;
 import repositories.EventoRepository;
 
 @Component
@@ -12,15 +11,17 @@ public class LineaComandos implements CommandLineRunner{
         this.repository = repository;
     }
 
-    private static Logger LOG = LoggerFactory.getLogger(LineaComandos.class);
-
     @Override
+    @Transactional
     public void run(String... args) throws Exception {
-        for (int i = 0; i < args.length; ++i) {
-            LOG.info("args[{}]: {}", i, args[i]);
+        for (String s: args) {
+            System.out.println(s);
         }
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'run'");
+        if(args.length > 0){
+            for(Evento e : repository.findByNombre(args[0])){
+                System.out.println(e);
+            }
+        }
     }
     
 }
