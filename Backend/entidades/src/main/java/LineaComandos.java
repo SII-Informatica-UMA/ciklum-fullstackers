@@ -1,16 +1,14 @@
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import entidades.Evento;
-import entidades.Hueco;
 import jakarta.transaction.Transactional;
 import repositories.EventoRepository;
-import repositories.HuecoRepository;
 @Component
 public class LineaComandos implements CommandLineRunner {
 	
 	
 	private EventoRepository repoEvento;
-    private HuecoRepository  repoHueco;
+    
 
 
 	public LineaComandos(EventoRepository repoEvento) {
@@ -37,7 +35,6 @@ public class LineaComandos implements CommandLineRunner {
         ejercicio2.setNombre("Maria");
         ejercicio2.setDescripcion("Ejercicio");
         ejercicio2.setObservaciones("Sin observaciones");
-        ejercicio2.setLugar("Malaga");
         ejercicio2.setDuracionMinutos(60L);
         ejercicio2.setFechaHoraInicio("2023/07/23");
         repoEvento.save(ejercicio2);
@@ -53,6 +50,7 @@ public class LineaComandos implements CommandLineRunner {
         repoEvento.save(ejercicio3);
 
 		//Ejercicio 4
+        /*
         Hueco ejercicio4 = new  Hueco();
         ejercicio4.setDuracionMinutos(60L);
         ejercicio4.setFechaHoraInicio("2024/06/05");
@@ -72,7 +70,7 @@ public class LineaComandos implements CommandLineRunner {
         ejercicio6.setFechaHoraInicio("2024/06/15");
         ejercicio6.setReglaRecurrencia("mensual");
         repoHueco.save(ejercicio6);
-		
+		*/
 
 		
 

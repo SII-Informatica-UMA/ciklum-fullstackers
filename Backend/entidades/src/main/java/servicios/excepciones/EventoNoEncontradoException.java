@@ -2,7 +2,7 @@
 //no esta terminado, PROVISIONAL
 
 
-package excepciones;
+package servicios.excepciones;
 
 public class EventoNoEncontradoException extends RuntimeException {
     public EventoNoEncontradoException() {

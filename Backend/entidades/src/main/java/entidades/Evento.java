@@ -15,25 +15,13 @@ import jakarta.persistence.Column;
 public class Evento {
 
     @Id @GeneratedValue
-private Long id;
-
-@Column(name="NOMBRE", nullable=false, length=50)
-private String nombre;
-
-@Column(name="DESCRIPCION", nullable=false, length=50)
-private String descripcion;
-
-@Column(name="OBSERVACIONES", nullable=false, length=50)
-private String observaciones;
-
-@Column(name="LUGAR", nullable=false, length=50)
-private String lugar;
-
-@Column(name="DURACION_MINUTOS", nullable=false)
-private Long duracionMinutos;
-
-@Column(name="FECHA_HORA_INICIO", nullable=false, length=50)
-private String fechaHoraInicio;
+    private Long id;
+    private String nombre;
+    private String descripcion;
+    private String observaciones;
+    private String lugar;
+    private Long duracionMinutos;
+    private String fechaHoraInicio;
 
 
     // Constructor vacío
