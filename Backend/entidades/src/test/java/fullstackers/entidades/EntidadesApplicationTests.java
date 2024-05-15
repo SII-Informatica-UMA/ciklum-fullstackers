@@ -1,10 +1,9 @@
 package fullstackers.entidades;
 
-import entidades.EntidadesApplication; // Import the missing class
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.SpringBootConfiguration;
 
-@SpringBootTest(classes = EntidadesApplication.class)
+@SpringBootConfiguration
 class EntidadesApplicationTests {
 
 	@Test
