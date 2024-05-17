@@ -18,5 +18,4 @@ public class EventoDTO {
     private String lugar;
     private Long duracionMinutos;
     private String fechaHoraInicio;
-    private Long idEntrenador;
 }

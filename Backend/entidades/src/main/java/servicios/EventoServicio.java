@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import controladores.EventoRest;
-import entidades.Evento;
 import repositories.EventoRepository;
 import servicios.excepciones.EventoNoEncontradoException;
 
@@ -21,46 +20,6 @@ public class EventoServicio {
 	public EventoServicio(EventoRepository eventoRepo) {
 		this.eventoRepo=eventoRepo;
 	}
-
-	public List<Evento> obtenerEventos() {
-		return eventoRepo.findAll();
-	}
-
-	public Evento obtenerEvento(Long id) {
-		var evento = eventoRepo.findById(id);
-		if (evento.isPresent()) {
-			return evento.get();
-		} else {
-			throw new EventoNoEncontradoException();
-		}	
-	}
-
-	public void actualizarEvento(Evento evento) {
-		if (eventoRepo.existsById(evento.getId())) {
-			eventoRepo.save(evento);
-		} else {
-			throw new EventoNoEncontradoException();
-		}
-	}
-
-	public void eliminarEvento(Long id) {
-		if (eventoRepo.existsById(id)) {
-			eventoRepo.deleteById(id);
-		} else {
-			throw new EventoNoEncontradoException();
-		}
-	}
-	
-	/*public boolean consultarDisponibilidadEntrenador(Long idEntrenador, LocalDateTime fechaInicio, LocalDateTime fechaFin) {
-		Entrenador entrenador = entrenadorRepo.findById(idEntrenador)
-				.orElseThrow(() -> new EntrenadorNoEncontradoException());
-
-		List<Evento> eventos = eventoRepo.findByEntrenadorAndFechaInicioBetween(entrenador, fechaInicio, fechaFin);
-
-		return eventos.isEmpty();
-	}*/ //Da error por el Entrenador
-
-
 	/*  ***IMPLEMENTAR TODOS LOS MÉTODOS QUE LLAME EL CONTROLADOR***
 
 	public List<Ingrediente> obtenerIngredientes() {
