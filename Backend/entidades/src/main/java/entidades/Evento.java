@@ -4,13 +4,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.*;
 
 import java.util.Objects;
 
+import org.springframework.http.ProblemDetail;
+
 import jakarta.persistence.Column;
 
+@Getter
+@Setter
+@Builder
 @Entity
 @Table(name = "EVENTO") 
+
 
 public class Evento {
 
@@ -22,6 +29,7 @@ public class Evento {
     private String lugar;
     private Long duracionMinutos;
     private String fechaHoraInicio;
+    private Long idEntrenador;
 
 
     // Constructor vacío
@@ -29,7 +37,7 @@ public class Evento {
     }
 
     // Constructor con todos los atributos
-    public Evento(Long id, String nombre, String descripcion, String observaciones, String lugar, Long duracionMinutos, String fechaHoraInicio) {
+    public Evento(Long id, String nombre, String descripcion, String observaciones, String lugar, Long duracionMinutos, String fechaHoraInicio, Long idEntrenador) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -37,60 +45,9 @@ public class Evento {
         this.lugar = lugar;
         this.duracionMinutos = duracionMinutos;
         this.fechaHoraInicio = fechaHoraInicio;
+        this.idEntrenador = idEntrenador;
     }
     
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    public String getLugar() {
-        return lugar;
-    }
-
-    public void setLugar(String lugar) {
-        this.lugar = lugar;
-    }
-
-    public Long getDuracionMinutos() {
-        return duracionMinutos;
-    }
-
-    public void setDuracionMinutos(Long duracionMinutos) {
-        this.duracionMinutos = duracionMinutos;
-    }
-
-    public String getFechaHoraInicio() {
-        return fechaHoraInicio;
-    }
-
-    public void setFechaHoraInicio(String fechaHoraInicio) {
-        this.fechaHoraInicio = fechaHoraInicio;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(descripcion, duracionMinutos, fechaHoraInicio, lugar, nombre, observaciones);
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -140,5 +97,6 @@ public class Evento {
                 + ", lugar=" + lugar + ", duracionMinutos=" + duracionMinutos + ", fechaHoraInicio=" + fechaHoraInicio
                 + "]";
     }
+
 
 }

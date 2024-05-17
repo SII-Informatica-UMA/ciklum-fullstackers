@@ -15,4 +15,5 @@ public class EventoNuevoDTO {
     private String lugar;
     private Long duracionMinutos;
     private String fechaHoraInicio;
+    private String tipo;
 }

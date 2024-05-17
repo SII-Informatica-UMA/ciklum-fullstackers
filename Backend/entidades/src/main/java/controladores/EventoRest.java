@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.function.Function;
 
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import dtos.EventoDTO;
 //import es.uma.informatica.practica3.dtos.ProductoDTO;
 import entidades.Evento;
 import servicios.EventoServicio;
@@ -32,6 +34,16 @@ public class EventoRest {
 	public EventoRest(EventoServicio servicio) {
 		this.servicio = servicio;
 	}
+
+	@GetMapping("/{idEntrenador}/{idElemento}")
+    public ResponseEntity<EventoDTO> getEvento(@PathVariable Long idEntrenador, @PathVariable Long idElemento) {
+        return ResponseEntity.of(servicio.obtenerEvento(idElemento, idEntrenador)
+				.map(EventoDTO::fromEvento));
+    }
+	
+	//se que lo del map tiene que hacerse pero no se ni por que ni como
+
+
     /* ***EJEMPLOS***
 	@GetMapping
 	public List<ProductoDTO> obtenerTodosLosProductos(UriComponentsBuilder uriBuilder) {
