@@ -1,0 +1,2 @@
+create sequence evento_seq start with 1 increment by 50;
+create table evento (duracion_minutos bigint not null, id bigint not null, id_cliente bigint, id_entrenador bigint not null, inicio timestamp(6) not null, descripcion varchar(255), lugar varchar(255), nombre varchar(255), observaciones varchar(255), regla_recurrencia varchar(255), tipo varchar(255) not null check (tipo in ('DISPONIBILIDAD','CITA')), primary key (id));
