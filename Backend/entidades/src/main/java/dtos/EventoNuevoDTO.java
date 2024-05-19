@@ -16,4 +16,5 @@ public class EventoNuevoDTO {
     private Long duracionMinutos;
     private String fechaHoraInicio;
     private String tipo;
+    private Long idCliente;
 }

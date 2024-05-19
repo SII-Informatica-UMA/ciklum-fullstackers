@@ -29,6 +29,7 @@ public class Evento {
     private String lugar;
     private Long duracionMinutos;
     private String fechaHoraInicio;
+    private Long idCliente;
     private Long idEntrenador;
 
 
@@ -37,7 +38,8 @@ public class Evento {
     }
 
     // Constructor con todos los atributos
-    public Evento(Long id, String nombre, String descripcion, String observaciones, String lugar, Long duracionMinutos, String fechaHoraInicio, Long idEntrenador) {
+    public Evento(Long id, String nombre, String descripcion, String observaciones, String lugar, Long duracionMinutos
+    , String fechaHoraInicio, Long idEntrenador, Long idCliente) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;

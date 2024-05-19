@@ -21,7 +21,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import dtos.EventoDTO;
-//import es.uma.informatica.practica3.dtos.ProductoDTO;
+import dtos.EventoNuevoDTO;
 import entidades.Evento;
 import servicios.EventoServicio;
 import servicios.excepciones.EventoNoEncontradoException;
@@ -36,9 +36,9 @@ public class EventoRest {
 	}
 
 	@GetMapping("/{idEntrenador}/{idElemento}")
-    public ResponseEntity<EventoDTO> getEvento(@PathVariable Long idEntrenador, @PathVariable Long idElemento) {
+    public ResponseEntity<EventoDTO> getEvento(Long idEntrenador, Long idElemento) {
         return ResponseEntity.of(servicio.obtenerEvento(idElemento, idEntrenador)
-				.map(EventoDTO::fromEvento));
+				.map(Mapper :: toEventoDTO));
     }
 	
 	//se que lo del map tiene que hacerse pero no se ni por que ni como
