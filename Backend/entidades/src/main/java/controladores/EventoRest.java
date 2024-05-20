@@ -59,63 +59,18 @@ public class EventoRest {
 		this.servicio.eliminarEvento(idElemento);
 	}
 
-    /* ***EJEMPLOS***
-	@GetMapping
-	public List<ProductoDTO> obtenerTodosLosProductos(UriComponentsBuilder uriBuilder) {
-		var productos = servicio.obtenerProductos();
-		Function<Producto, ProductoDTO> mapper = (p -> 
-			ProductoDTO.fromProducto(p, 
-					productoUriBuilder(uriBuilder.build()), 
-					IngredienteRest.ingredienteUriBuilder(uriBuilder.build())));
-		return productos.stream()
-			.map(mapper)
-			.toList();
+
+	@GetMapping("/{idEntrenador}")
+	public List<EventoDTO> getEventos(@PathVariable (required = true) Long idEntrenador) {
+		return this.servicio.getDisponibilidad(idEntrenador).get().stream().map(Mapper::toEventoDTO).toList();
 	}
-	
-	public static Function<Long, URI> productoUriBuilder(UriComponents uriBuilder) {
-		;
-		return id -> UriComponentsBuilder.newInstance().uriComponents(uriBuilder).path("/productos")
-				.path(String.format("/%d", id))
-				.build()
-				.toUri();
+
+	@PostMapping("/{idEntrenador}")
+	public ResponseEntity<EventoDTO> postEvento(@PathVariable Long idEntrenador, @RequestBody EventoNuevoDTO evento, UriComponentsBuilder builder) {
+		Evento nuevoEvento = Mapper.toEvento(evento);
+		nuevoEvento.setIdEntrenador(idEntrenador);
+		Long id = this.servicio.crearEvento(nuevoEvento);
+		EventoDTO e = Mapper.toEventoDTO(nuevoEvento);
+		return ResponseEntity.created(builder.path("/calendario/{idEntrenador}").buildAndExpand(idEntrenador, id).toUri()).body(e);
 	}
-	
-	@PostMapping
-	public ResponseEntity<?> aniadirProducto(@RequestBody ProductoDTO producto, UriComponentsBuilder uriBuilder) {
-		Producto prod = producto.producto();
-		Long id = servicio.aniadirProducto(prod);
-		return ResponseEntity.created(
-				productoUriBuilder(uriBuilder.build()).apply(id))
-				.build();
-	}
-	
-	@GetMapping("{id}")
-	@ResponseStatus(code=HttpStatus.OK)
-	public ProductoDTO obtenerProducto(@PathVariable Long id, UriComponentsBuilder uriBuilder) {
-		Producto producto = servicio.obtenerProducto(id);
-		return ProductoDTO.fromProducto(producto, 
-				productoUriBuilder(uriBuilder.build()), 
-				IngredienteRest.ingredienteUriBuilder(uriBuilder.build()));
-	}
-	
-	@PutMapping("{id}")
-	public void actualizarProducto(@PathVariable Long id, @RequestBody ProductoDTO producto) {
-		Producto entidadProducto = producto.producto();
-		entidadProducto.setId(id);
-		servicio.actualizarProducto(entidadProducto);
-	}
-	
-	@DeleteMapping("{id}")
-	public void eliminarProducto(@PathVariable Long id) {
-		servicio.eliminarProducto(id);
-	}
-	
-	@ExceptionHandler(EntidadNoEncontradaException.class)
-	@ResponseStatus(code = HttpStatus.NOT_FOUND)
-	public void noEncontrado() {}
-	
-	@ExceptionHandler(EntidadExistenteException.class)
-	@ResponseStatus(code = HttpStatus.CONFLICT)
-	public void existente() {}
-	*/
 }
