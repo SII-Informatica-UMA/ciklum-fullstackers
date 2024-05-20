@@ -48,54 +48,49 @@ public class Evento {
         this.duracionMinutos = duracionMinutos;
         this.fechaHoraInicio = fechaHoraInicio;
         this.idEntrenador = idEntrenador;
+        this.idCliente = idCliente; 
     }
     
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Evento other = (Evento) obj;
-        if (nombre == null) {
-            if (other.nombre != null)
-                return false;
-        } else if (!nombre.equals(other.nombre))
-            return false;
-        if (descripcion == null) {
-            if (other.descripcion != null)
-                return false;
-        } else if (!descripcion.equals(other.descripcion))
-            return false;
-        if (observaciones == null) {
-            if (other.observaciones != null)
-                return false;
-        } else if (!observaciones.equals(other.observaciones))
-            return false;
-        if (lugar == null) {
-            if (other.lugar != null)
-                return false;
-        } else if (!lugar.equals(other.lugar))
-            return false;
-        if (duracionMinutos == null) {
-            if (other.duracionMinutos != null)
-                return false;
-        } else if (!duracionMinutos.equals(other.duracionMinutos))
-            return false;
-        if (fechaHoraInicio == null) {
-            if (other.fechaHoraInicio != null)
-                return false;
-        } else if (!fechaHoraInicio.equals(other.fechaHoraInicio))
-            return false;
+public boolean equals(Object obj) {
+    if (this == obj)
         return true;
-    }
-
+    if (obj == null)
+        return false;
+    if (getClass() != obj.getClass())
+        return false;
+    Evento other = (Evento) obj;
+    if (nombre == null) {
+        if (other.nombre != null)
+            return false;
+    } else if (!nombre.equals(other.nombre))
+        return false;
+    if (descripcion == null) {
+        if (other.descripcion != null)
+            return false;
+    } else if (!descripcion.equals(other.descripcion))
+        return false;
+    if (id == null) {
+        if (other.id != null)
+            return false;
+    } else if (!id.equals(other.id))
+        return false;
+    if (idCliente == null) {
+        if (other.idCliente != null)
+            return false;
+    } else if (!idCliente.equals(other.idCliente))
+        return false;
+    if (idEntrenador == null) {
+        if (other.idEntrenador != null)
+            return false;
+    } else if (!idEntrenador.equals(other.idEntrenador))
+        return false;
+    return true;
+}
     @Override
     public String toString() {
-        return "Evento [nombre=" + nombre + ", descripcion=" + descripcion + ", observaciones=" + observaciones
+        return "Evento [ ID="+id+", IDCliente="+idCliente+", IDEntrenador="+idEntrenador+ ", nombre=" + nombre + ", descripcion=" + descripcion + ", observaciones=" + observaciones
                 + ", lugar=" + lugar + ", duracionMinutos=" + duracionMinutos + ", fechaHoraInicio=" + fechaHoraInicio
                 + "]";
     }
