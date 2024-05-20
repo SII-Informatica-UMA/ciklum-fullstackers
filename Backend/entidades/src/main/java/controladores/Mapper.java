@@ -6,7 +6,7 @@ import entidades.Evento;
 
 public class Mapper {
 
-    public static EventoDTO toEventoDTO(EventoDTO evento) {
+    public static EventoDTO toEventoDTO(Evento evento) {
         return EventoDTO.builder()
                 .id(evento.getId())
                 .nombre(evento.getNombre())
@@ -16,7 +16,6 @@ public class Mapper {
                 .duracionMinutos(evento.getDuracionMinutos())
                 .fechaHoraInicio(evento.getFechaHoraInicio())
                 .idCliente(evento.getIdCliente())
-                .tipo(evento.getTipo())
                 .build();
     }
 
