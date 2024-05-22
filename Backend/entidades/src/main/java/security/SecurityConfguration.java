@@ -45,4 +45,6 @@ public class SecurityConfguration {
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
                 .map(authentication -> (UserDetails) authentication.getPrincipal());
     }
+
+    
 }

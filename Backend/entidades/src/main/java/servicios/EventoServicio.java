@@ -58,4 +58,6 @@ public class EventoServicio {
 	public Optional<List<Evento>> getDisponibilidad(Long idEntrenador) {
         return eventoRepo.findByIdEntrenador(idEntrenador);
     }
+
+	
 }

@@ -25,6 +25,7 @@ import dtos.EventoDTO;
 import dtos.EventoNuevoDTO;
 import entidades.Evento;
 import servicios.EventoServicio;
+import servicios.excepciones.EventoExistenteException;
 import servicios.excepciones.EventoNoEncontradoException;
 
 
@@ -73,4 +74,13 @@ public class EventoRest {
 		EventoDTO e = Mapper.toEventoDTO(nuevoEvento);
 		return ResponseEntity.created(builder.path("/calendario/{idEntrenador}").buildAndExpand(idEntrenador, id).toUri()).body(e);
 	}
+
+	@ExceptionHandler(EventoNoEncontradoException.class)
+	@ResponseStatus(code = HttpStatus.NOT_FOUND)
+	public void noEncontrado() {}
+	
+	@ExceptionHandler(EventoExistenteException.class)
+	@ResponseStatus(code = HttpStatus.CONFLICT)
+	public void existente() {}
+	
 }
