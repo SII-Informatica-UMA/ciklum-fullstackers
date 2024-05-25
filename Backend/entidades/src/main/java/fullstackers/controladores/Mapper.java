@@ -1,8 +1,8 @@
-package controladores;
+package fullstackers.controladores;
 
-import dtos.EventoDTO;
-import dtos.EventoNuevoDTO;
-import entidades.Evento;
+import fullstackers.dtos.EventoDTO;
+import fullstackers.dtos.EventoNuevoDTO;
+import fullstackers.entidades.Evento;
 
 public class Mapper {
 

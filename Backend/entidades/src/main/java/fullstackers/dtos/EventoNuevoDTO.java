@@ -1,7 +1,6 @@
-package dtos;
+package fullstackers.dtos;
 
 import lombok.*;
-import entidades.Evento;
 
 @Getter
 @Setter

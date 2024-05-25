@@ -2,7 +2,7 @@
 //no esta terminado, PROVISIONAL
 
 
-package servicios.excepciones;
+package fullstackers.servicios.excepciones;
 
 public class EventoNoEncontradoException extends RuntimeException {
     public EventoNoEncontradoException() {

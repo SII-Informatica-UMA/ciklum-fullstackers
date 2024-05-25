@@ -1,4 +1,4 @@
-package security;
+package fullstackers.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

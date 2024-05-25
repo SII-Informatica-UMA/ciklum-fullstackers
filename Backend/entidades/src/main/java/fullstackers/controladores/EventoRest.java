@@ -1,8 +1,5 @@
-package controladores;
-
-import java.net.URI;
+package fullstackers.controladores;
 import java.util.List;
-import java.util.function.Function;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,16 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import controladores.Mapper;
-import dtos.EventoDTO;
-import dtos.EventoNuevoDTO;
-import entidades.Evento;
-import servicios.EventoServicio;
-import servicios.excepciones.EventoExistenteException;
-import servicios.excepciones.EventoNoEncontradoException;
+import fullstackers.dtos.EventoDTO;
+import fullstackers.dtos.EventoNuevoDTO;
+import fullstackers.entidades.Evento;
+import fullstackers.servicios.EventoServicio;
+import fullstackers.servicios.excepciones.EventoExistenteException;
+import fullstackers.servicios.excepciones.EventoNoEncontradoException;
 
 
 @RestController

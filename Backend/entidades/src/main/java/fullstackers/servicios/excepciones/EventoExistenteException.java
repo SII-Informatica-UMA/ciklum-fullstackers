@@ -1,4 +1,4 @@
-package servicios.excepciones;
+package fullstackers.servicios.excepciones;
 
 public class EventoExistenteException extends RuntimeException{
     public EventoExistenteException() {

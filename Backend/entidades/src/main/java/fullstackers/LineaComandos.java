@@ -1,8 +1,9 @@
+package fullstackers;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import entidades.Evento;
+import fullstackers.entidades.Evento;
 import jakarta.transaction.Transactional;
-import repositories.EventoRepository;
+import fullstackers.repositories.EventoRepository;
 @Component
 public class LineaComandos implements CommandLineRunner {
 	
