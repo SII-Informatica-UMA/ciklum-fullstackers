@@ -26,18 +26,22 @@ public class SecurityConfguration {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(cs -> cs.disable())
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .anyRequest().authenticated()
+                                // Permitir el acceso a todas las rutas sin necesidad de autenticación
+                                .anyRequest().permitAll()
                 )
                 .sessionManagement(sessionManagement ->
                         sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
+        
+        // Agregar el filtro JWT después del filtro de autenticación básica
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 
