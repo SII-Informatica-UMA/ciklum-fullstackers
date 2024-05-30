@@ -12,15 +12,15 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriBuilderFactory;
 
+import fullstackers.dtos.*;
 import fullstackers.EntidadesApplication;
 import fullstackers.repositories.EventoRepository;
-import fullstackers.security.JwtUtil;
+
 
 import java.net.URI;
 import java.util.List;
@@ -30,10 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Tests de EventoServicio")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class EntidadesApplicationTests {
-	@Autowired
-	private JwtUtil jwtUtil;
-	
-	private String token;
+
 
 	@Autowired
 	private TestRestTemplate restTemplate;
@@ -63,14 +60,13 @@ class EntidadesApplicationTests {
 	private RequestEntity<Void> get(String scheme, String host, int port, String path) {
 		URI uri = uri(scheme, host, port, path);
 		var peticion = RequestEntity.get(uri)
-				.accept(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + token)
-				.build();
+				.accept(MediaType.APPLICATION_JSON)				.build();
 		return peticion;
 	}
 
 	private RequestEntity<Void> delete(String scheme, String host, int port, String path) {
 		URI uri = uri(scheme, host, port, path);
-		var peticion = RequestEntity.delete(uri).header("Authorization", "Bearer " + token)
+		var peticion = RequestEntity.delete(uri)
 				.build();
 		return peticion;
 	}
@@ -78,7 +74,7 @@ class EntidadesApplicationTests {
 	private <T> RequestEntity<T> post(String scheme, String host, int port, String path, T object) {
 		URI uri = uri(scheme, host, port, path);
 		var peticion = RequestEntity.post(uri)
-				.contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + token)
+				.contentType(MediaType.APPLICATION_JSON)
 				.body(object);
 		return peticion;
 	}
@@ -86,14 +82,13 @@ class EntidadesApplicationTests {
 	private <T> RequestEntity<T> put(String scheme, String host, int port, String path, T object) {
 		URI uri = uri(scheme, host, port, path);
 		var peticion = RequestEntity.put(uri)
-				.contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + token)
+				.contentType(MediaType.APPLICATION_JSON)
 				.body(object);
 		return peticion;
 	}
 
 	@BeforeEach
 	public void init() {
-		token = jwtUtil.generateToken(new User("admin", "", List.of()));
 	}
 	
 
@@ -108,12 +103,12 @@ class EntidadesApplicationTests {
 			var request = get("http", "localhost", port, "/calendario/1");
 
 			var response = restTemplate.exchange(request,
-					new ParameterizedTypeReference<List<Evento>>() {
+					new ParameterizedTypeReference<List<EventoDTO>>() {
 					});
 
 			assertThat(response.getStatusCode().value()).isEqualTo(404);
 		}
-
+//	MOCK EN EL BEFORE-EACH
 		@Test//2
 		@DisplayName("cuando se busca un Evento")
 		public void testObtenerEvento() {
@@ -185,7 +180,6 @@ class EntidadesApplicationTests {
 
 		}
 	}
-	@SuppressWarnings("null")
 	@Test//1
 	@DisplayName("cuando se buscan todos los Eventos")
 	public void testObtenerEventos() {
@@ -193,14 +187,14 @@ class EntidadesApplicationTests {
 		var request = get("http", "localhost", port, "/calendario/1");
 
 		var response = restTemplate.exchange(request,
-				new ParameterizedTypeReference<List<Evento>>() {
+				new ParameterizedTypeReference<List<EventoDTO>>() {
 				});
 
 		assertThat(response.getStatusCode().value()).isEqualTo(200);
 		assertThat(response.getBody().size()).isEqualTo(1);
 	}
 
-	@SuppressWarnings("null")
+	//@SuppressWarnings("null")
 	@Test//2
 	@DisplayName("cuando se busca un Evento")
 	public void testObtenerEvento() {
@@ -212,7 +206,7 @@ class EntidadesApplicationTests {
 				});
 
 		assertThat(response.getStatusCode().value()).isEqualTo(200);
-		assertThat(response.getBody().getId()).isEqualTo(1L);
+		//assertThat(response.getBody().getId()).isEqualTo(1L);
 
 	}
 

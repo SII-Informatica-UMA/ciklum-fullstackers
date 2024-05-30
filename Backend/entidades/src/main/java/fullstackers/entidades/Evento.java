@@ -6,12 +6,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
 
-import java.util.Objects;
+/*import java.util.Objects;
 
 import org.springframework.http.ProblemDetail;
 
 import jakarta.persistence.Column;
-
+ */
 @Getter
 @Setter
 @Builder

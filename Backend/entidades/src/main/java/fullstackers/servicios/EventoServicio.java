@@ -2,14 +2,9 @@ package fullstackers.servicios;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fullstackers.controladores.EventoRest;
-import fullstackers.controladores.Mapper;
-import fullstackers.dtos.EventoDTO;
 import fullstackers.entidades.Evento;
 import fullstackers.repositories.EventoRepository;
 import fullstackers.servicios.excepciones.EventoNoEncontradoException;

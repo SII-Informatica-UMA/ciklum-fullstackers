@@ -1,5 +1,7 @@
 package fullstackers.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.*;
 
 @Getter
@@ -9,7 +11,7 @@ import lombok.*;
 @Builder
 
 public class EventoDTO { 
-
+    @JsonProperty("id")
     private Long id;
     private String nombre;
     private String descripcion;
