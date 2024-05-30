@@ -50,50 +50,6 @@ public class Evento {
         this.idEntrenador = idEntrenador;
         this.idCliente = idCliente; 
     }
-    
-
-    @Override
-public boolean equals(Object obj) {
-    if (this == obj)
-        return true;
-    if (obj == null)
-        return false;
-    if (getClass() != obj.getClass())
-        return false;
-    Evento other = (Evento) obj;
-    if (nombre == null) {
-        if (other.nombre != null)
-            return false;
-    } else if (!nombre.equals(other.nombre))
-        return false;
-    if (descripcion == null) {
-        if (other.descripcion != null)
-            return false;
-    } else if (!descripcion.equals(other.descripcion))
-        return false;
-    if (id == null) {
-        if (other.id != null)
-            return false;
-    } else if (!id.equals(other.id))
-        return false;
-    if (idCliente == null) {
-        if (other.idCliente != null)
-            return false;
-    } else if (!idCliente.equals(other.idCliente))
-        return false;
-    if (idEntrenador == null) {
-        if (other.idEntrenador != null)
-            return false;
-    } else if (!idEntrenador.equals(other.idEntrenador))
-        return false;
-    return true;
-}
-    @Override
-    public String toString() {
-        return "Evento [ ID="+id+", IDCliente="+idCliente+", IDEntrenador="+idEntrenador+ ", nombre=" + nombre + ", descripcion=" + descripcion + ", observaciones=" + observaciones
-                + ", lugar=" + lugar + ", duracionMinutos=" + duracionMinutos + ", fechaHoraInicio=" + fechaHoraInicio
-                + "]";
-    }
 
 
 }

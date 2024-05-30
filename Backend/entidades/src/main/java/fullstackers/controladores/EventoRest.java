@@ -58,7 +58,8 @@ public class EventoRest {
 
 	@GetMapping("/{idEntrenador}")
 	public List<EventoDTO> getEventos(@PathVariable (required = true) Long idEntrenador) {
-		return this.servicio.getDisponibilidad(idEntrenador).get().stream().map(Mapper::toEventoDTO).toList();
+		var eventos = servicio.getDisponibilidad(idEntrenador);
+		return eventos.get().stream().map(Mapper::toEventoDTO).toList();
 	}
 
 	@PostMapping("/{idEntrenador}")
