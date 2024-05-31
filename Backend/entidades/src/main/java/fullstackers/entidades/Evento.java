@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
- 
+import java.util.Objects;
 
 /*import java.util.Objects;
 
@@ -52,5 +52,24 @@ public class Evento {
         this.idCliente = idCliente; 
     }
 
+    @Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Evento evento = (Evento) o;
+    return Objects.equals(id, evento.id) &&
+            Objects.equals(nombre, evento.nombre) &&
+            Objects.equals(descripcion, evento.descripcion) &&
+            Objects.equals(observaciones, evento.observaciones) &&
+            Objects.equals(lugar, evento.lugar) &&
+            Objects.equals(duracionMinutos, evento.duracionMinutos) &&
+            Objects.equals(fechaHoraInicio, evento.fechaHoraInicio) &&
+            Objects.equals(idEntrenador, evento.idEntrenador) &&
+            Objects.equals(idCliente, evento.idCliente);
+}
 
+@Override
+public int hashCode() {
+    return Objects.hash(id, nombre, descripcion, observaciones, lugar, duracionMinutos, fechaHoraInicio, idEntrenador, idCliente);
+}
 }

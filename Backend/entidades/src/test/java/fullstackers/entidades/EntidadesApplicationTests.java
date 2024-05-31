@@ -21,7 +21,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriBuilderFactory;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import org.springframework.http.ResponseEntity;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
@@ -54,8 +56,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 class EntidadesApplicationTests {
 
 	private MockRestServiceServer mockServer;
-    private ObjectMapper mapper = new ObjectMapper();
-
+private ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	/*@Autowired
 	private RestTemplate rt;*/
 
@@ -442,7 +443,7 @@ class EntidadesApplicationTests {
 
 		assertThat(response.getStatusCode().value()).isEqualTo(400);
 	}
-	
+	//a
 	@Test
     @DisplayName("Constructor con todos los argumentos en EventoDTO")
     void constructorConTodosLosArgumentosEnEventoDTO() {
@@ -469,6 +470,96 @@ class EntidadesApplicationTests {
         assertEquals(fechaHoraInicio, dto.getFechaHoraInicio());
         assertEquals(idCliente, dto.getIdCliente());
         assertEquals(tipo, dto.getTipo());
+    }
+
+	@Test
+@DisplayName("cuando se busca un Evento")
+public void testBuscarEventoExistente() {
+    EntrenadorDTO entrenador = new EntrenadorDTO();
+    EventoDTO evento = new EventoDTO();
+    evento.setId(1L);
+    entrenador.setIdUsuario(1L);
+
+    try {
+        mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/calendario/" + entrenador.getIdUsuario() + "/" + evento.getId())))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.OK)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(mapper.writeValueAsString(evento)));
+    } catch (URISyntaxException | JsonProcessingException e) {
+        e.printStackTrace();
+    }
+
+    // Corrected the get method call to ensure the right return type is used
+    RequestEntity<Void> request = get("http", "localhost", port, "/calendario/" + entrenador.getIdUsuario() + "/" + evento.getId());
+
+    ResponseEntity<EventoDTO> response = restTemplate.exchange(request,
+        new ParameterizedTypeReference<EventoDTO>() {
+        });
+
+    assertThat(response.getStatusCode().value()).isEqualTo(200);
+    assertThat(response.getBody()).isEqualTo(evento);
+}
+/*@Test
+@DisplayName("Prueba para EntrenadorDTO")
+public void testEntrenadorDTO() {
+    EntrenadorDTO entrenador = new EntrenadorDTO();
+    entrenador.setIdUsuario(1L);
+    assertEquals(1L, entrenador.getIdUsuario());
+}*/
+@Test
+    @DisplayName("Mapear de DTO a Entidad")
+    public void testMapearDtoAEntidad() {
+        // Crear un objeto DTO de prueba
+        EventoDTO eventoDTO = new EventoDTO();
+        eventoDTO.setId(1L);
+        eventoDTO.setNombre("Evento de prueba");
+
+        // Mapear el DTO a una entidad utilizando ObjectMapper
+        Evento evento = mapper.convertValue(eventoDTO, Evento.class);
+
+        // Verificar que el mapeo se realizó correctamente
+        assertEquals(eventoDTO.getId(), evento.getId());
+        assertEquals(eventoDTO.getNombre(), evento.getNombre());
+        // Verificar otros atributos si es necesario
+    }
+	@Test
+    void testMapper() {
+        // Crear un objeto de prueba
+        EventoDTO eventoDTO = new EventoDTO();
+        eventoDTO.setId(1L);
+        eventoDTO.setNombre("Evento de prueba");
+
+        // Usar el mapper para convertir el objeto a otro tipo
+        Evento evento = mapper.convertValue(eventoDTO, Evento.class);
+
+        // Verificar que el mapeo se realizó correctamente
+        assertEquals(eventoDTO.getId(), evento.getId());
+        assertEquals(eventoDTO.getNombre(), evento.getNombre());
+    }
+	@Test//3
+@DisplayName("cuando se crea un Evento sin Entrenador")
+public void testCrearEventoSinEntrenador() {
+    try {
+        mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/calendario/" + "2")))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withStatus(HttpStatus.NOT_FOUND));
+    } catch (URISyntaxException e) {
+        e.printStackTrace();
+    }
+
+    var request = post("http", "localhost", port, "/calendario/" + 2, new Evento());
+
+    var response = restTemplate.exchange(request, ResponseEntity.class);
+
+    assertThat(response.getStatusCode().value()).isEqualTo(404);
+    assertThat(eventoRepo.findById(2L).isPresent()).isFalse();
+}
+
+
+    private Object POST(String string, String string2, int port, String string3) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'POST'");
     }
 }
 }
