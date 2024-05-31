@@ -30,6 +30,15 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import java.util.Optional;
+import java.util.ArrayList;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
@@ -43,8 +52,10 @@ import fullstackers.controladores.*;
 import fullstackers.dtos.*;
 import fullstackers.EntidadesApplication;
 import fullstackers.security.*;
-
 import fullstackers.repositories.EventoRepository;
+import fullstackers.servicios.EventoServicio;
+
+
 import jakarta.transaction.Transactional;
 
 import org.springframework.security.core.userdetails.User;
@@ -60,6 +71,11 @@ private ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeatur
 	/*@Autowired
 	private RestTemplate rt;*/
 
+	
+
+    @Autowired
+    private EventoServicio eventoServicio;
+	
 	@Autowired
 	private TestRestTemplate restTemplate;
 
@@ -142,6 +158,27 @@ private ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeatur
 	@DisplayName("cuando no hay Eventos")
 	public class sinEventos {
 
+		@Test
+    @DisplayName("no encontrar el entrenador al eliminar un evento")
+        public void eliminarEventoEntrenadorNoEncontrado() {
+            Long idEntrenador = 1L;
+            Long idEvento = 1L;
+
+            try {
+                mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/calendario/" + idEntrenador + "/" + idEvento)))
+                        .andExpect(method(HttpMethod.DELETE))
+                        .andRespond(withStatus(HttpStatus.FORBIDDEN));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+            var request = delete("http", "localhost", port,
+                                                "/calendario/" + idEntrenador + "/" + idEvento);
+            ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        }
+		
+		
 		@Test//1
 		@DisplayName("cuando se buscan todos los Eventos")
 		public void testObtenerEventos() {
@@ -562,4 +599,5 @@ public void testCrearEventoSinEntrenador() {
         throw new UnsupportedOperationException("Unimplemented method 'POST'");
     }
 }
+
 }
