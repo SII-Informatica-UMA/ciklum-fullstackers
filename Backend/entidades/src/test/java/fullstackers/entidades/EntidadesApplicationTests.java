@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -13,6 +14,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriBuilderFactory;
@@ -29,11 +31,14 @@ import java.net.URI;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@AutoConfigureMockMvc
 @SpringBootTest(classes=EntidadesApplication.class,webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DisplayName("Tests de EventoServicio")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class EntidadesApplicationTests {
 
+	private MockRestServiceServer mockServer;
+    private ObjectMapper mapper = new ObjectMapper();
 
 	@Autowired
 	private TestRestTemplate restTemplate;
@@ -41,12 +46,13 @@ class EntidadesApplicationTests {
 	@Value(value = "${local.server.port}")
 	private int port;
 
-	@MockBean
+	@Autowired
 	private EventoRepository eventoRepo;
 
 	@BeforeEach
 	public void initializeDatabase() {
 		eventoRepo.deleteAll();
+		mockServer = MockRestServiceServer.createServer(restTemplate.getRestTemplate());
 	}
 
 	private URI uri(String scheme, String host, int port, String... paths) {
@@ -90,10 +96,6 @@ class EntidadesApplicationTests {
 		return peticion;
 	}
 
-	@BeforeEach
-	public void init() {
-	}
-	
 
 	@Nested
 	@DisplayName("cuando no hay Eventos")
@@ -102,6 +104,11 @@ class EntidadesApplicationTests {
 		@Test//1
 		@DisplayName("cuando se buscan todos los Eventos")
 		public void testObtenerEventos() {
+			EntrenadorDTO entrenador = new EntrenadorDTO();
+			entrenador.setId(1L);
+
+
+
 
 			var request = get("http", "localhost", port, "/calendario/1");
 			List<Evento> lista = eventoRepo.findAll();
@@ -130,28 +137,14 @@ class EntidadesApplicationTests {
 		@DisplayName("cuando se elimina un Evento que no existe")
 		public void testEliminarEventoNoExistente() {
 
-			var request = delete("http", "localhost", port, "/calerndario/1/1");
+			var request = delete("http", "localhost", port, "/calendario/1/1");
 
 			var response = restTemplate.exchange(request,
 					new ParameterizedTypeReference<Void>() {
 					});
 			assertThat(response.getStatusCode().value()).isEqualTo(404);
 		}
-
-		/*@Test//4
-		@DisplayName("cuando se un Evento sin entrenador")
-		public void testCrearEvento() {
-			Evento evento = new Evento();
-
-			var request = post("http", "localhost", port, "/calendario/1", evento);
-
-			var response = restTemplate.exchange(request,
-					new ParameterizedTypeReference<Evento>() {
-					});
-
-			assertThat(response.getStatusCode().value()).isEqualTo(404);
-		}*/
-
+		
 		@Test//5
 		@DisplayName("cuando se actualiza un Evento que no existe")
 		public void testActualizarEventoNoExistente() {
@@ -184,23 +177,12 @@ class EntidadesApplicationTests {
 			evento1.setIdCliente(1L);
 			evento1.setLugar("mi casa");
 			evento1.setObservaciones("ninguna");
-	/* 		
-	private Long id;
-    private String nombre;
-    private String descripcion;
-    private String observaciones;
-    private String lugar;
-    private Long duracionMinutos;
-    private String fechaHoraInicio;
-    private Long idCliente;
-    private Long idEntrenador;
-	*/
 			eventoRepo.save(evento1);
 
 		}
 	
 	@Test//1
-		@DisplayName("cuando se buscan todos los Eventos")
+		@DisplayName("No hay elementos en el repositorio")
 		public void testObtenerEventos() {
 
 			var request = get("http", "localhost", port, "/calendario/1");
@@ -228,7 +210,7 @@ class EntidadesApplicationTests {
 	@DisplayName("cuando se elimina un Evento que no existe")
 	public void testEliminarEventoNoExistente() {
 
-		var request = delete("http", "localhost", port, "/calerndario/1/1");
+		var request = delete("http", "localhost", port, "/calendario/1/1");
 
 		var response = restTemplate.exchange(request,
 				new ParameterizedTypeReference<Void>() {
