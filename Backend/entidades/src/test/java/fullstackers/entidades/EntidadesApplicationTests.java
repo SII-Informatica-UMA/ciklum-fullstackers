@@ -41,7 +41,7 @@ class EntidadesApplicationTests {
 	@Value(value = "${local.server.port}")
 	private int port;
 
-	@MockBean
+	@Autowired
 	private EventoRepository eventoRepo;
 
 	@BeforeEach
@@ -130,28 +130,14 @@ class EntidadesApplicationTests {
 		@DisplayName("cuando se elimina un Evento que no existe")
 		public void testEliminarEventoNoExistente() {
 
-			var request = delete("http", "localhost", port, "/calerndario/1/1");
+			var request = delete("http", "localhost", port, "/calendario/1/1");
 
 			var response = restTemplate.exchange(request,
 					new ParameterizedTypeReference<Void>() {
 					});
 			assertThat(response.getStatusCode().value()).isEqualTo(404);
 		}
-
-		/*@Test//4
-		@DisplayName("cuando se un Evento sin entrenador")
-		public void testCrearEvento() {
-			Evento evento = new Evento();
-
-			var request = post("http", "localhost", port, "/calendario/1", evento);
-
-			var response = restTemplate.exchange(request,
-					new ParameterizedTypeReference<Evento>() {
-					});
-
-			assertThat(response.getStatusCode().value()).isEqualTo(404);
-		}*/
-
+		
 		@Test//5
 		@DisplayName("cuando se actualiza un Evento que no existe")
 		public void testActualizarEventoNoExistente() {
@@ -184,23 +170,12 @@ class EntidadesApplicationTests {
 			evento1.setIdCliente(1L);
 			evento1.setLugar("mi casa");
 			evento1.setObservaciones("ninguna");
-	/* 		
-	private Long id;
-    private String nombre;
-    private String descripcion;
-    private String observaciones;
-    private String lugar;
-    private Long duracionMinutos;
-    private String fechaHoraInicio;
-    private Long idCliente;
-    private Long idEntrenador;
-	*/
 			eventoRepo.save(evento1);
 
 		}
 	
 	@Test//1
-		@DisplayName("cuando se buscan todos los Eventos")
+		@DisplayName("No hay elementos en el repositorio")
 		public void testObtenerEventos() {
 
 			var request = get("http", "localhost", port, "/calendario/1");
@@ -228,7 +203,7 @@ class EntidadesApplicationTests {
 	@DisplayName("cuando se elimina un Evento que no existe")
 	public void testEliminarEventoNoExistente() {
 
-		var request = delete("http", "localhost", port, "/calerndario/1/1");
+		var request = delete("http", "localhost", port, "/calendario/1/1");
 
 		var response = restTemplate.exchange(request,
 				new ParameterizedTypeReference<Void>() {
