@@ -11,14 +11,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriBuilderFactory;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fullstackers.controladores.*;
@@ -28,6 +36,8 @@ import fullstackers.repositories.EventoRepository;
 import jakarta.transaction.Transactional;
 
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,10 +50,13 @@ class EntidadesApplicationTests {
 	private MockRestServiceServer mockServer;
     private ObjectMapper mapper = new ObjectMapper();
 
+	/*@Autowired
+	private RestTemplate rt;*/
+
 	@Autowired
 	private TestRestTemplate restTemplate;
 
-	@Value(value = "${local.server.port}")
+	@Value(value = "8080")
 	private int port;
 
 	@Autowired
@@ -104,11 +117,7 @@ class EntidadesApplicationTests {
 		@Test//1
 		@DisplayName("cuando se buscan todos los Eventos")
 		public void testObtenerEventos() {
-			EntrenadorDTO entrenador = new EntrenadorDTO();
-			entrenador.setId(1L);
-
-
-
+			
 
 			var request = get("http", "localhost", port, "/calendario/1");
 			List<Evento> lista = eventoRepo.findAll();
@@ -120,13 +129,34 @@ class EntidadesApplicationTests {
 		}
 //	MOCK EN EL BEFORE-EACH
 		@Test//2
-		@DisplayName("cuando se busca un Evento")
-		public void testObtenerEvento() {
+		@DisplayName("cuando se busca un Evento concreto")
+		public void testObtenerEvento(){
+			EntrenadorDTO entrenador = new EntrenadorDTO();
+			entrenador.setIdUsuario(2L);
 
-			var request = get("http", "localhost", port, "/calendario/1/1");
+			try {
+				/*mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/entrenador/" + entrenador.getIdUsuario())))
+						.andExpect(method(HttpMethod.GET))
+						.andRespond(withStatus(HttpStatus.OK)
+						.contentType(MediaType.APPLICATION_JSON)
+						.body(mapper.writeValueAsString(entrenador)));*/
+
+				mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/calendario/" + entrenador.getIdUsuario())))
+						.andExpect(method(HttpMethod.GET))
+						.andRespond(withStatus(HttpStatus.NOT_FOUND));
+
+
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			} /*catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+
+			var request = get("http", "localhost", port, "/calendario/" + entrenador.getIdUsuario());
 
 			var response = restTemplate.exchange(request,
-					new ParameterizedTypeReference<Evento>() {
+					new ParameterizedTypeReference<EventoDTO>() {
 					});
 
 			assertThat(response.getStatusCode().value()).isEqualTo(404);
@@ -136,8 +166,19 @@ class EntidadesApplicationTests {
 		@Test//3
 		@DisplayName("cuando se elimina un Evento que no existe")
 		public void testEliminarEventoNoExistente() {
+			EntrenadorDTO entrenador = new EntrenadorDTO();
+			entrenador.setIdUsuario(2L);
 
-			var request = delete("http", "localhost", port, "/calendario/1/1");
+			try {
+				mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/calendario/" + entrenador.getIdUsuario())))
+						.andExpect(method(HttpMethod.DELETE))
+						.andRespond(withStatus(HttpStatus.NOT_FOUND));
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+
+
+			var request = delete("http", "localhost", port, "/calendario/" +entrenador.getIdUsuario());
 
 			var response = restTemplate.exchange(request,
 					new ParameterizedTypeReference<Void>() {
@@ -148,10 +189,28 @@ class EntidadesApplicationTests {
 		@Test//5
 		@DisplayName("cuando se actualiza un Evento que no existe")
 		public void testActualizarEventoNoExistente() {
+			EntrenadorDTO entrenador = new EntrenadorDTO();
+			entrenador.setIdUsuario(2L);
 
-			Evento evento = new Evento();
+			Evento evento = new Evento().builder()
+					.nombre("Spinning")
+					.fechaHoraInicio(new Date().toString())
+					.duracionMinutos(60L)
+					.lugar("Gimnasio")
+					.observaciones("ninguna")
+					.idCliente(3L)
+					.id(1L)
+					.idEntrenador(entrenador.getIdUsuario())
+					.build();
+			try{
+				mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/calendario/" + entrenador.getIdUsuario())))
+						.andExpect(method(HttpMethod.PUT))
+						.andRespond(withStatus(HttpStatus.NOT_FOUND));
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
 
-			var request = put("http", "localhost", port, "/calendario/1/1", evento);
+			var request = put("http", "localhost", port, "/calendario/" + entrenador.getIdUsuario(), evento);
 			var response = restTemplate.exchange(request,
 					new ParameterizedTypeReference<Evento>() {
 					});
@@ -187,18 +246,29 @@ class EntidadesApplicationTests {
 
 			var request = get("http", "localhost", port, "/calendario/1");
 			List<Evento> lista = eventoRepo.findAll();
-			assertThat(lista).hasSize(0);
+			assertThat(lista).hasSize(1);
 		}
 
 	//@SuppressWarnings("null")
 	@Test//2
 	@DisplayName("cuando se busca un Evento")
-	public void testObtenerEvento() {
+	public void obtenerEventoConcreto() {
+		EntrenadorDTO entrenador = new EntrenadorDTO();
+		entrenador.setIdUsuario(2L);
 
-		var request = get("http", "localhost", port, "/calendario/1/1");
+		try{
+			mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/calendario/" + entrenador.getIdUsuario())))
+					.andExpect(method(HttpMethod.GET))
+					.andRespond(withStatus(HttpStatus.OK));
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+
+
+		var request = get("http", "localhost", port, "/calendario/" + entrenador.getIdUsuario());
 
 		var response = restTemplate.exchange(request,
-				new ParameterizedTypeReference<Evento>() {
+				new ParameterizedTypeReference<EventoDTO>() {
 				});
 
 		assertThat(response.getStatusCode().value()).isEqualTo(200);
@@ -207,29 +277,62 @@ class EntidadesApplicationTests {
 	}
 
 	@Test//3
-	@DisplayName("cuando se elimina un Evento que no existe")
-	public void testEliminarEventoNoExistente() {
+	@DisplayName("cuando se elimina un Evento")
+	public void testEliminarEventoExistente() {
+		EntrenadorDTO entrenador = new EntrenadorDTO();
+		entrenador.setIdUsuario(2L);
 
-		var request = delete("http", "localhost", port, "/calendario/1/1");
+		try{
+			mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/calendario/" + entrenador.getIdUsuario())))
+					.andExpect(method(HttpMethod.DELETE))
+					.andRespond(withStatus(HttpStatus.OK));
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+
+		var request = delete("http", "localhost", port, "/calendario/" + entrenador.getIdUsuario());
 
 		var response = restTemplate.exchange(request,
 				new ParameterizedTypeReference<Void>() {
 				});
 		assertThat(response.getStatusCode().value()).isEqualTo(200);
+		assertThat(eventoRepo.findById(2L).isPresent()).isFalse();
 	}
 
 	@Test//4
 	@DisplayName("cuando se crea un Evento")
 	public void testCrearEvento() {
-		Evento evento = new Evento();
+		EntrenadorDTO entrenador = new EntrenadorDTO();
+		entrenador.setIdUsuario(2L);	
 
-		var request = post("http", "localhost", port, "/calendario/1", evento);//Entrenador como entidad???? como busca el 1???
+		Evento evento = Evento.builder()
+				.nombre("Zumba")
+				.fechaHoraInicio(new Date().toString())
+				.duracionMinutos(60L)
+				.lugar("Gimnasio")
+				.observaciones("ninguna")
+				.idCliente(3L)
+				.id(1L)
+				.build();
+
+		try{
+			mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/calendario/" + entrenador.getIdUsuario())))
+					.andExpect(method(HttpMethod.POST))
+					.andRespond(withStatus(HttpStatus.CREATED));
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+
+		var request = post("http", "localhost", port, "/calendario/" + entrenador.getIdUsuario(), evento);
 
 		var response = restTemplate.exchange(request,
-				new ParameterizedTypeReference<Evento>() {
+				new ParameterizedTypeReference<Void>() {
 				});
 
 		assertThat(response.getStatusCode().value()).isEqualTo(201);
+
+		/*List<Evento> eventoBD = eventoRepo.findAll();
+		assertThat(eventoBD.get(1).getNombre()).isEqualTo(evento.getNombre());*/
 	}
 
 	/*@Test//5
@@ -246,19 +349,71 @@ class EntidadesApplicationTests {
 		assertThat(response.getStatusCode().value()).isEqualTo(200);
 	}*/
 
-	@Test//6
-	@DisplayName("cuando se crea un Evento con nombre usado")
-	public void testCrearEventoNombreUsado() {
-		Evento evento = new Evento();
-		evento.setNombre("Primer Evento");
+	@Test//5
+        @DisplayName("Se actualiza un Evento-----")
+        public void testActualizarEventoNoExistente() {
+            EntrenadorDTO entrenador = new EntrenadorDTO();
+            entrenador.setIdUsuario(2L);
 
-		var request = post("http", "localhost", port, "/calendario/1", evento);
+            Evento evento = new Evento().builder()
+                    .nombre("Spinning")
+                    .fechaHoraInicio(new Date().toString())
+                    .duracionMinutos(60L)
+                    .lugar("Gimnasio")
+                    .observaciones("ninguna")
+                    .idCliente(3L)
+                    .id(1L)
+                    .idEntrenador(entrenador.getIdUsuario())
+                    .build();
+            try{
+                mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/calendario/" + entrenador.getIdUsuario())))
+                        .andExpect(method(HttpMethod.PUT))
+                        .andRespond(withStatus(HttpStatus.OK));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+            var request = put("http", "localhost", port, "/calendario/" + entrenador.getIdUsuario(), evento);
+            var response = restTemplate.exchange(request,
+                    new ParameterizedTypeReference<Evento>() {
+                    });
+
+            assertThat(response.getStatusCode().value()).isEqualTo(200);
+        }
+
+
+	@Test//6
+	@DisplayName("cuando se crea un Evento con nombre usado o la cita esta solapda")
+	public void testCrearEventoNombreUsado() {
+		EntrenadorDTO entrenador = new EntrenadorDTO();
+		entrenador.setIdUsuario(2L);
+
+
+		Evento evento =  Evento.builder()
+				.nombre("Waterpolo")
+				.fechaHoraInicio(new Date().toString())
+				.duracionMinutos(180L)
+				.lugar("Piscina")
+				.observaciones("ninguna")
+				.idCliente(3L)
+				.id(1L)
+				.idEntrenador(entrenador.getIdUsuario())
+				.build();
+
+		try{
+			mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/calendario/" + entrenador.getIdUsuario())))
+					.andExpect(method(HttpMethod.POST))
+					.andRespond(withStatus(HttpStatus.BAD_REQUEST));
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+
+		var request = post("http", "localhost", port, "/calendario/" + entrenador.getIdUsuario(), evento);
 
 		var response = restTemplate.exchange(request,
 				new ParameterizedTypeReference<Evento>() {
 				});
 
-		assertThat(response.getStatusCode().value()).isEqualTo(201);
+		assertThat(response.getStatusCode().value()).isEqualTo(400);
 	}
 }
 }

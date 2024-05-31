@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EntrenedorDTO {
+public class EntrenadorDTO {
     private Long idUsuario;
     private String telefono;
     private String direccion;
