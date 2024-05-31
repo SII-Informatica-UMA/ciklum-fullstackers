@@ -2,6 +2,8 @@ package fullstackers.servicios;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +26,7 @@ public class EventoServicio {
 	}
 
 	public Optional<Evento> obtenerEvento(Long id, Long idEntrenador) {
-		return this.eventoRepo.findByIdEntrenadorIdElemento(idEntrenador, id);	
+		return this.eventoRepo.findByIdEntrenadorOrId(idEntrenador, id);	
 	}
 
 
@@ -46,9 +48,12 @@ public class EventoServicio {
 	}
 
 	public Long crearEvento(Evento evento) {
-		evento.setId(null);
-		return eventoRepo.save(evento).getId();
+		if(evento.getId()==null)
+			evento.setId(null);
+		eventoRepo.save(evento);
+		return evento.getId();
 	}
+
 
 	public Optional<List<Evento>> getDisponibilidad(Long idEntrenador) {
         return eventoRepo.findByIdEntrenador(idEntrenador);
