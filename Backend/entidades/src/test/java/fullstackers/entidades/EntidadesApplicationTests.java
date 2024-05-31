@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -22,25 +21,32 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriBuilderFactory;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fullstackers.controladores.*;
 import fullstackers.dtos.*;
 import fullstackers.EntidadesApplication;
+import fullstackers.security.*;
+
 import fullstackers.repositories.EventoRepository;
 import jakarta.transaction.Transactional;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.List;
-import static org.assertj.core.api.Assertions.assertThat;
-
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 @AutoConfigureMockMvc
 @SpringBootTest(classes=EntidadesApplication.class,webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DisplayName("Tests de EventoServicio")
@@ -62,6 +68,11 @@ class EntidadesApplicationTests {
 	@Autowired
 	private EventoRepository eventoRepo;
 
+	@Autowired
+    private JwtUtil jwtUtil;
+
+    private String token;
+
 	@BeforeEach
 	public void initializeDatabase() {
 		eventoRepo.deleteAll();
@@ -81,33 +92,49 @@ class EntidadesApplicationTests {
 
 	private RequestEntity<Void> get(String scheme, String host, int port, String path) {
 		URI uri = uri(scheme, host, port, path);
-		var peticion = RequestEntity.get(uri)
-				.accept(MediaType.APPLICATION_JSON)				.build();
-		return peticion;
+		UserDetails userDetails = new User("testuser", "", Collections.emptyList());
+        token = jwtUtil.generateToken(userDetails);
+
+		return RequestEntity.get(uri)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer " + token)
+                                .build();
 	}
 
 	private RequestEntity<Void> delete(String scheme, String host, int port, String path) {
 		URI uri = uri(scheme, host, port, path);
-		var peticion = RequestEntity.delete(uri)
-				.build();
-		return peticion;
+		UserDetails userDetails = new User("testuser", "", Collections.emptyList());
+        token = jwtUtil.generateToken(userDetails);
+
+		return RequestEntity.delete(uri)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .header("Authorization", "Bearer " + token)
+                                .build();
 	}
 
 	private <T> RequestEntity<T> post(String scheme, String host, int port, String path, T object) {
-		URI uri = uri(scheme, host, port, path);
-		var peticion = RequestEntity.post(uri)
-				.contentType(MediaType.APPLICATION_JSON)
-				.body(object);
-		return peticion;
-	}
+    URI uri = uri(scheme, host, port, path);
+    UserDetails userDetails = new User("testuser", "", Collections.emptyList());
+    token = jwtUtil.generateToken(userDetails);
+
+    return RequestEntity.post(uri)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(object); 
+}
 
 	private <T> RequestEntity<T> put(String scheme, String host, int port, String path, T object) {
-		URI uri = uri(scheme, host, port, path);
-		var peticion = RequestEntity.put(uri)
-				.contentType(MediaType.APPLICATION_JSON)
-				.body(object);
-		return peticion;
-	}
+    URI uri = uri(scheme, host, port, path);
+    UserDetails userDetails = new User("testuser", "", Collections.emptyList());
+    token = jwtUtil.generateToken(userDetails);
+
+    return RequestEntity.put(uri)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(object); 
+}
 
 
 	@Nested
@@ -415,5 +442,33 @@ class EntidadesApplicationTests {
 
 		assertThat(response.getStatusCode().value()).isEqualTo(400);
 	}
+	
+	@Test
+    @DisplayName("Constructor con todos los argumentos en EventoDTO")
+    void constructorConTodosLosArgumentosEnEventoDTO() {
+        Long id = 1L;
+        String nombre = "Evento de prueba";
+        String descripcion = "Descripción del evento";
+        String observaciones = "Observaciones del evento";
+        String lugar = "Lugar del evento";
+        Long duracionMinutos = 60L;
+        String fechaHoraInicio = "2024-05-31T12:00:00";
+        Long idCliente = 123L;
+        String tipo = "Tipo de evento";
+
+        EventoDTO dto = new EventoDTO(id, nombre, descripcion, observaciones, lugar,
+                duracionMinutos, fechaHoraInicio, idCliente, tipo);
+
+        assertNotNull(dto);
+        assertEquals(id, dto.getId());
+        assertEquals(nombre, dto.getNombre());
+        assertEquals(descripcion, dto.getDescripcion());
+        assertEquals(observaciones, dto.getObservaciones());
+        assertEquals(lugar, dto.getLugar());
+        assertEquals(duracionMinutos, dto.getDuracionMinutos());
+        assertEquals(fechaHoraInicio, dto.getFechaHoraInicio());
+        assertEquals(idCliente, dto.getIdCliente());
+        assertEquals(tipo, dto.getTipo());
+    }
 }
 }
