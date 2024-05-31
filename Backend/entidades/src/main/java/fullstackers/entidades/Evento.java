@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
+import java.util.Objects; 
 
 /*import java.util.Objects;
 
@@ -32,7 +33,7 @@ public class Evento {
     private Long idCliente;
     private Long idEntrenador;
 
-
+    
     // Constructor vacío
     public Evento() {
     }
@@ -50,6 +51,27 @@ public class Evento {
         this.idEntrenador = idEntrenador;
         this.idCliente = idCliente; 
     }
+
+    @Override
+public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null || getClass() != obj.getClass()) return false;
+    Evento other = (Evento) obj;
+    return Objects.equals(id, other.id) &&
+           Objects.equals(nombre, other.nombre) &&
+           Objects.equals(descripcion, other.descripcion) &&
+           Objects.equals(observaciones, other.observaciones) &&
+           Objects.equals(lugar, other.lugar) &&
+           Objects.equals(duracionMinutos, other.duracionMinutos) &&
+           Objects.equals(fechaHoraInicio, other.fechaHoraInicio) &&
+           Objects.equals(idCliente, other.idCliente) &&
+           Objects.equals(idEntrenador, other.idEntrenador);
+}
+
+@Override
+public int hashCode() {
+    return Objects.hash(id, nombre, descripcion, observaciones, lugar, duracionMinutos, fechaHoraInicio, idCliente, idEntrenador);
+}
 
 
 }
